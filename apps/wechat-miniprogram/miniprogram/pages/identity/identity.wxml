@@ -1,0 +1,43 @@
+<test-mode-return />
+<view class="page identity-page">
+  <view class="identity-header">
+    <text class="brand-title">Sample Room OS</text>
+    <text class="brand-subtitle">微信小程序移动入口</text>
+  </view>
+
+  <view class="card" wx:if="{{loggedIn}}">
+    <text class="section-title">当前账号</text>
+    <text class="description">{{identityLabel}}</text>
+    <button class="secondary-button" loading="{{busy}}" disabled="{{busy}}" bindtap="logout">退出登录</button>
+  </view>
+
+  <view class="card" wx:else>
+    <text class="login-title">账号登录</text>
+    <radio-group class="account-type-group" bindchange="onAccountTypeChange">
+      <label class="account-type-option {{accountType === 'business' ? 'account-type-active' : ''}}">
+        <radio class="account-radio" value="business" checked="{{accountType === 'business'}}" />
+        <text>业务账号</text>
+      </label>
+      <label class="account-type-option {{accountType === 'worker' ? 'account-type-active' : ''}}">
+        <radio class="account-radio" value="worker" checked="{{accountType === 'worker'}}" />
+        <text>工序员工</text>
+      </label>
+    </radio-group>
+
+    <view class="field" wx:if="{{accountType === 'business'}}">
+      <text class="field-label">登录用户名</text>
+      <input class="input" placeholder="请输入 Web 登录用户名" value="{{username}}" bindinput="onUsernameInput" />
+    </view>
+    <view class="field" wx:else>
+      <text class="field-label">登录手机号</text>
+      <input class="input" type="number" maxlength="20" placeholder="请输入注册时的手机号" value="{{phoneNumber}}" bindinput="onPhoneInput" />
+    </view>
+    <view class="field">
+      <text class="field-label">密码</text>
+      <input class="input" password placeholder="请输入密码" value="{{password}}" bindinput="onPasswordInput" />
+    </view>
+
+    <button class="primary-button" loading="{{busy}}" disabled="{{busy}}" bindtap="submitLogin">登录</button>
+  </view>
+  <text class="endpoint-note" wx:if="{{!loggedIn}}">小程序使用发布前配置的公网服务地址，无需扫描网络配置二维码。</text>
+</view>

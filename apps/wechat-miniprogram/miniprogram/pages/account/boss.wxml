@@ -1,0 +1,37 @@
+<test-mode-return />
+<view class="page boss-home">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <view class="card identity-card">
+    <view class="avatar">板</view>
+    <view class="identity-copy">
+      <text class="identity-name">{{displayName}}</text>
+      <text class="description">定价、对账与账号管理</text>
+    </view>
+  </view>
+
+  <view class="entry-card primary-entry" bindtap="openPending">
+    <view>
+      <text class="entry-title">待对账</text>
+      <text class="entry-description">订单定价、筛选与生成对账单</text>
+    </view>
+    <view class="entry-side"><text class="entry-count">{{pendingCount}}</text><text class="entry-arrow">›</text></view>
+  </view>
+
+  <view class="entry-card" bindtap="openStatements">
+    <view>
+      <text class="entry-title">对账单</text>
+      <text class="entry-description">查看、下载、收款与退回订单</text>
+    </view>
+    <view class="entry-side"><text class="entry-count">{{statementCount}}</text><text class="entry-arrow">›</text></view>
+  </view>
+
+  <view class="entry-card" bindtap="openAccount">
+    <view>
+      <text class="entry-title">账号与安全</text>
+      <text class="entry-description">修改登录信息、姓名和密码</text>
+    </view>
+    <text class="entry-arrow">›</text>
+  </view>
+
+  <button class="logout-button" loading="{{busy}}" disabled="{{busy}}" bindtap="logout">退出登录</button>
+</view>

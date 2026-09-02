@@ -1,0 +1,22 @@
+.filter-card { padding: 24rpx; }
+.quick-grid { display: grid; gap: 14rpx; grid-template-columns: 1fr 1fr; margin-top: 18rpx; }
+.date-shortcuts { display: flex; gap: 12rpx; margin-top: 18rpx; }
+.date-shortcuts button { flex: 1; margin: 0; }
+.filter-more { background: transparent; color: #176b87; font-size: 26rpx; margin-top: 12rpx; }
+.advanced-filter { border-top: 2rpx solid #eef1f3; margin-top: 12rpx; padding-top: 20rpx; }
+.date-row { display: grid; gap: 12rpx; grid-template-columns: 1fr 1fr; }
+.order-card { display: flex; gap: 20rpx; padding: 24rpx; }
+.order-thumbnail { background: #eef2f4; border-radius: 10rpx; flex: 0 0 156rpx; height: 196rpx; width: 156rpx; }
+.order-body { flex: 1; min-width: 0; }
+.order-title-row { align-items: flex-start; display: flex; gap: 14rpx; justify-content: space-between; }
+.style-block { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.stage-tag { background: #e7f4f7; border-radius: 999rpx; color: #176b87; flex: 0 0 auto; font-size: 22rpx; padding: 7rpx 14rpx; }
+.key-grid { display: grid; gap: 14rpx; grid-template-columns: 1fr 1fr; margin-top: 16rpx; }
+.key-grid view, .customer-block { display: flex; flex-direction: column; gap: 3rpx; }
+.key-grid text, .customer-block text { font-size: 24rpx; }
+.customer-block { border-top: 2rpx solid #eef1f3; margin-top: 16rpx; padding-top: 14rpx; }
+.request-row { display: flex; flex-direction: column; font-size: 24rpx; gap: 4rpx; margin-top: 14rpx; }
+.description { font-size: 23rpx; margin-top: 2rpx; }
+.card-footer { border-top: 2rpx solid #eef1f3; display: flex; justify-content: flex-end; margin-top: 16rpx; padding-top: 14rpx; }
+.detail-button { background: #fff; border: 2rpx solid #176b87; color: #176b87; margin: 0; min-width: 150rpx; }
+.result-summary { color: #7a8b99; display: flex; font-size: 24rpx; justify-content: space-between; margin: 18rpx 4rpx; }

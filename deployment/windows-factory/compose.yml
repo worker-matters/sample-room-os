@@ -1,0 +1,85 @@
+name: sample-room-factory
+
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ${FACTORY_DATA_ROOT_HOST}/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    image: ${SAMPLE_ROOM_TOOLS_IMAGE:-sample-room-factory-migrate:latest}
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["npx", "prisma", "migrate", "deploy", "--schema", "apps/api/prisma/schema.prisma"]
+
+  bootstrap:
+    image: ${SAMPLE_ROOM_TOOLS_IMAGE:-sample-room-factory-bootstrap:latest}
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      INITIAL_SYSTEM_OWNER_USERNAME: ${INITIAL_SYSTEM_OWNER_USERNAME:-}
+      INITIAL_SYSTEM_OWNER_DISPLAY_NAME: ${INITIAL_SYSTEM_OWNER_DISPLAY_NAME:-}
+      INITIAL_SYSTEM_OWNER_PASSWORD: ${INITIAL_SYSTEM_OWNER_PASSWORD:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["npx", "tsx", "apps/api/prisma/bootstrap-system-owner.ts"]
+
+  api:
+    image: ${SAMPLE_ROOM_APP_IMAGE:-sample-room-factory-api:latest}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3001
+      LIFECYCLE_RUNNER_PORT: 3002
+      LIFECYCLE_RUNNER_TOKEN: ${LIFECYCLE_RUNNER_TOKEN:-}
+      AUTH_MODE: formal
+      PERSISTENCE_MODE: prisma
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      SAMPLE_ROOM_STORAGE_ROOT: /data/storage
+      SAMPLE_ROOM_ORDERS_ROOT: /data/orders
+      SAMPLE_ROOM_LOCAL_FILE_ROOT: /data/local-files
+      SAMPLE_ROOM_ORDER_FOLDER_ROOT: /data/order-folders
+      SAMPLE_ROOM_CUTTING_INBOX_ROOT: /data/cutting-inbox
+      FACTORY_DATA_ROOT_HOST: ${FACTORY_DATA_ROOT_HOST}
+      FACTORY_BACKUP_ROOT_HOST: ${FACTORY_BACKUP_ROOT_HOST}
+      SAMPLE_ROOM_UPDATE_ROOT: /updates
+      SAMPLE_ROOM_APP_VERSION: ${SAMPLE_ROOM_APP_VERSION:-0.1.0}
+      SAMPLE_ROOM_UPDATE_MAX_BYTES: ${SAMPLE_ROOM_UPDATE_MAX_BYTES:-8589934592}
+      SAMPLE_ROOM_TRUST_PROXY: ${SAMPLE_ROOM_TRUST_PROXY:-}
+      SAMPLE_ROOM_CORS_ORIGINS: ${SAMPLE_ROOM_CORS_ORIGINS:-}
+      SAMPLE_ROOM_PUBLIC_HTTPS_HOSTS: ${SAMPLE_ROOM_PUBLIC_HTTPS_HOSTS:-}
+      SAMPLE_ROOM_PUBLIC_BASE_URL: ${PUBLIC_WEB_BASE_URL:-}
+      SAMPLE_ROOM_PUBLIC_WEB_BASE_URL: ${PUBLIC_WEB_BASE_URL:-}
+      SAMPLE_ROOM_PUBLIC_API_BASE_URL: ${PUBLIC_API_BASE_URL:-}
+      SAMPLE_ROOM_LAN_WEB_BASE_URL: http://${FACTORY_LAN_IP}:3001
+      SAMPLE_ROOM_LAN_API_BASE_URL: http://${FACTORY_LAN_IP}:3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${SAMPLE_ROOM_HTTP_BIND:-0.0.0.0}:${SAMPLE_ROOM_HTTP_PORT:-3001}:3001"
+      # Private Runner control plane. Docker publishes it only to the Windows loopback interface.
+      - "127.0.0.1:${SAMPLE_ROOM_RUNNER_PORT:-3002}:3002"
+    volumes:
+      - ${FACTORY_DATA_ROOT_HOST}/application:/data
+      - ${SAMPLE_ROOM_STORAGE_ROOT}:/data/storage
+      - ${FACTORY_UPDATE_ROOT}:/updates
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12

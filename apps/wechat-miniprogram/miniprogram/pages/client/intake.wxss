@@ -1,0 +1,15 @@
+@import "./client-shared.wxss";
+
+.upload-section { padding-top: 10rpx; }
+.upload-actions { display: grid; gap: 16rpx; grid-template-columns: 1fr 1fr; margin: 24rpx 0; }
+.upload-actions button { font-size: 27rpx; width: 100%; }
+.image-grid { display: grid; gap: 16rpx; grid-template-columns: 1fr 1fr; }
+.image-item { border: 2rpx solid #e1e5ea; border-radius: 10rpx; overflow: hidden; }
+.image-item image { display: block; height: 220rpx; width: 100%; }
+.image-meta { align-items: center; display: flex; gap: 8rpx; justify-content: space-between; padding: 10rpx; }
+.image-meta text { font-size: 22rpx; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.image-meta button { font-size: 21rpx; margin: 0; }
+.compact-empty { padding: 38rpx 0; }
+.success-message { background: #edf9f0; border-radius: 10rpx; color: #187d39; margin-bottom: 20rpx; padding: 18rpx 22rpx; }
+.submit-button { margin-top: 30rpx; }
+.submit-note { display: block; margin-top: 14rpx; text-align: center; }

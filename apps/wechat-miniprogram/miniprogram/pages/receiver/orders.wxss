@@ -1,0 +1,23 @@
+.filter-card { padding: 24rpx; }
+.quick-grid { display: grid; gap: 14rpx; grid-template-columns: 1fr 1fr; margin-top: 18rpx; }
+.date-shortcuts { display: flex; gap: 12rpx; margin-top: 18rpx; }
+.date-shortcuts button { flex: 1; margin: 0; }
+.filter-more { background: transparent; color: #176b87; font-size: 26rpx; margin-top: 12rpx; }
+.advanced-filter { border-top: 2rpx solid #eef1f3; margin-top: 12rpx; padding-top: 20rpx; }
+.date-row { display: grid; gap: 12rpx; grid-template-columns: 1fr 1fr; }
+.order-main { align-items: flex-start; display: flex; gap: 20rpx; }
+.order-thumbnail { background: #eef2f4; border-radius: 10rpx; flex: 0 0 156rpx; height: 156rpx; width: 156rpx; }
+.order-thumbnail.placeholder { align-items: center; color: #7a8b99; display: flex; font-size: 32rpx; justify-content: center; }
+.order-body { flex: 1; min-width: 0; }
+.order-title-row { align-items: flex-start; display: flex; gap: 18rpx; justify-content: space-between; }
+.order-title-row > view { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.stage-tag { background: #e7f4f7; border-radius: 999rpx; color: #176b87; font-size: 24rpx; padding: 8rpx 16rpx; }
+.order-style-name { margin-top: 4rpx; }
+.key-grid { display: grid; gap: 18rpx 24rpx; grid-template-columns: 1fr 1fr; margin-top: 22rpx; }
+.key-grid view { display: flex; flex-direction: column; gap: 4rpx; }
+.key-grid .muted { font-size: 24rpx; }
+.request-row { display: flex; flex-direction: column; gap: 5rpx; margin-top: 18rpx; }
+.card-footer { border-top: 2rpx solid #eef1f3; display: grid; gap: 14rpx; grid-template-columns: 1fr 1fr; margin-top: 20rpx; padding-top: 16rpx; }
+.detail-button { background: #fff; border: 2rpx solid #176b87; color: #176b87; margin: 0; }
+.material-button { background: #176b87; color: #fff; margin: 0; }
+.result-summary { color: #7a8b99; display: flex; font-size: 24rpx; justify-content: space-between; margin: 18rpx 4rpx; }

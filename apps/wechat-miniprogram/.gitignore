@@ -1,0 +1,6 @@
+miniprogram_npm/
+project.private.config.json
+miniprogram/config/environment.local.ts
+!miniprogram/config/
+!miniprogram/config/environment.ts
+!miniprogram/config/environment.example.ts

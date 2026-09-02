@@ -1,0 +1,26 @@
+<test-mode-return />
+<client-tabs active="intake" role="client_business_user" />
+<view class="client-page intake-page">
+  <view class="client-notice">截图、照片或打样单图片会生成一张待接单订单；客户和业务员来自当前登录账号。</view>
+  <view class="client-notice client-error" wx:if="{{message}}">{{message}}</view>
+  <view class="success-message" wx:if="{{successMessage}}">{{successMessage}}</view>
+
+  <view class="client-section upload-section">
+    <text class="client-title">打样单照片</text>
+    <text class="client-muted">至少上传一张清晰图片，接单员后续会补齐订单资料。</text>
+    <view class="upload-actions">
+      <button class="client-secondary" bindtap="chooseCamera">拍照</button>
+      <button class="client-secondary" bindtap="chooseAlbum">从相册选择</button>
+    </view>
+    <view class="image-grid" wx:if="{{files.length}}">
+      <view class="image-item" wx:for="{{files}}" wx:key="path">
+        <image src="{{item.path}}" mode="aspectFill" />
+        <view class="image-meta"><text>{{item.name}}</text><button size="mini" data-index="{{index}}" bindtap="removeFile">删除</button></view>
+      </view>
+    </view>
+    <view class="client-empty compact-empty" wx:else>尚未选择图片</view>
+  </view>
+
+  <button class="client-primary submit-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">提交待接单</button>
+  <text class="client-muted submit-note">此操作只沿用现有拍照录入流程，不推进生产工序。</text>
+</view>

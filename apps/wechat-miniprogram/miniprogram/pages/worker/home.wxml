@@ -1,0 +1,29 @@
+<test-mode-return />
+<view class="page worker-home">
+  <view class="profile-row">
+    <view class="avatar"><text>●</text></view>
+    <text class="identity-name">{{displayName}}</text>
+    <text class="role-badge">{{workerType}}</text>
+  </view>
+
+  <view class="scan-entry" bindtap="openScanner">
+    <view class="scan-icon"><text></text><text></text><text></text><text></text></view>
+    <view class="scan-copy"><text class="scan-title">扫描订单二维码</text><text class="scan-description">扫描订单码开始或完成当前工序</text></view>
+    <text class="scan-arrow">›</text>
+  </view>
+
+  <view class="menu-card">
+    <view class="menu-row" bindtap="openPerformance">
+      <view class="menu-icon">▥</view>
+      <view class="menu-copy"><text class="entry-title">我的绩效</text><text class="entry-description">查看自己的生产记录与客观数据</text></view>
+      <text class="entry-arrow">›</text>
+    </view>
+    <view class="menu-row" bindtap="openAccount">
+      <view class="menu-icon">◇</view>
+      <view class="menu-copy"><text class="entry-title">账号与安全</text><text class="entry-description">修改登录手机号、姓名和密码</text></view>
+      <text class="entry-arrow">›</text>
+    </view>
+  </view>
+
+  <button class="logout-button" loading="{{busy}}" bindtap="logout">退出登录</button>
+</view>

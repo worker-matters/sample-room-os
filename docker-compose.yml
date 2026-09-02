@@ -1,0 +1,39 @@
+name: sample-room-development
+
+# DEVELOPMENT ONLY. Formal factory deployment must use:
+# deployment/windows-factory/compose.yml
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sample-room-v2-development-postgres
+    environment:
+      POSTGRES_DB: sample_room_v2
+      POSTGRES_USER: sample_room
+      POSTGRES_PASSWORD: sample_room
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - sample_room_v2_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sample_room -d sample_room_v2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: docs/current/deployment/Dockerfile.api.placeholder
+    profiles: ["future"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./shared/uploads:/app/shared/uploads
+
+volumes:
+  sample_room_v2_pgdata:

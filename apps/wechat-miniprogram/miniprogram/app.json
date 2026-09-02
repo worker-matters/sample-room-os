@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/scan/scan",
+    "pages/identity/identity",
+    "pages/identity/disabled",
+    "pages/identity/password-required",
+    "pages/dev/test-mode",
+    "pages/worker/home",
+    "pages/worker/performance",
+    "pages/receiver/home",
+    "pages/receiver/orders",
+    "pages/receiver/order-detail",
+    "pages/receiver/intake",
+    "pages/receiver/scan-charge",
+    "pages/planner/home",
+    "pages/planner/orders",
+    "pages/planner/order-detail",
+    "pages/planner/production-plan",
+    "pages/planner/scan-charge",
+    "pages/client/orders",
+    "pages/client/order-detail",
+    "pages/client/statistics",
+    "pages/client/registration",
+    "pages/client/intake",
+    "pages/client/supplement",
+    "pages/account/boss",
+    "pages/boss/pending",
+    "pages/boss/statements",
+    "pages/boss/pricing-detail",
+    "pages/boss/statement-detail",
+    "pages/account/security",
+    "pages/account/pattern-maker",
+    "pages/account/receiver",
+    "pages/account/planner",
+    "pages/account/client-admin",
+    "pages/account/client-business-user"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#173c5a",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "Sample Room OS"
+  },
+  "networkTimeout": {
+    "request": 5000,
+    "uploadFile": 20000
+  },
+  "usingComponents": {
+    "test-mode-return": "/components/test-mode-return/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}

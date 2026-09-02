@@ -1,0 +1,31 @@
+.hero {
+  margin: 28rpx 8rpx 44rpx;
+}
+
+.hero-title,
+.hero-subtitle {
+  display: block;
+}
+
+.hero-title {
+  font-size: 46rpx;
+  font-weight: 650;
+}
+
+.hero-subtitle {
+  color: #6c7884;
+  margin-top: 12rpx;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 18rpx 0;
+}
+
+.secondary-button {
+  background: #ffffff;
+  border: 1rpx solid #c8d2da;
+  border-radius: 14rpx;
+  margin-top: 20rpx;
+}

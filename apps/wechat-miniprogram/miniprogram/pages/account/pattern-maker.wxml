@@ -1,0 +1,7 @@
+<test-mode-return />
+<view class="page">
+  <view class="card">
+    <text class="title">版师移动端尚未开放</text>
+    <text class="description">当前仅用于确认身份路由。版师仍使用现有 Web 工作台。</text>
+  </view>
+</view>

@@ -1,0 +1,35 @@
+<test-mode-return />
+<view class="page statement-detail-page" wx:if="{{statement}}">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <view class="card summary-card">
+    <view class="card-head"><text class="title">{{statement.statementNo}}</text><text class="status-tag {{statement.status}}">{{statement.status === 'paid' ? '已收款' : statement.status === 'returned' ? '已退回' : '待付款'}}</text></view>
+    <view class="row"><text class="muted">客户</text><text>{{statement.customerName}}</text></view>
+    <view class="row"><text class="muted">客户业务员</text><text>{{statement.salespersonName || '-'}}</text></view>
+    <view class="row"><text class="muted">账期</text><text>{{statement.billingPeriod}}</text></view>
+    <view class="row"><text class="muted">订单数</text><text>{{statement.orderCount}} 单</text></view>
+    <view class="row total-row"><text>应收合计</text><text>¥{{statement.receivableAmount}}</text></view>
+  </view>
+
+  <text class="section-title outside-title">包含订单明细</text>
+  <view class="card item-card {{item.returnedAt ? 'returned-item' : ''}}" wx:for="{{statement.items}}" wx:key="id">
+    <view class="card-head">
+      <view><text class="item-title">{{item.styleNo}}</text><text class="description">{{item.styleName}}</text></view>
+      <button wx:if="{{statement.status === 'pending_payment' && !item.returnedAt}}" size="mini" class="danger-link" data-id="{{item.id}}" bindtap="returnItem">退回此订单</button>
+      <text wx:elif="{{item.returnedAt}}" class="status-tag returned">已退回</text>
+    </view>
+    <view class="money-grid">
+      <view><text class="muted">样衣单价</text><text>¥{{item.quotedPrice}}</text></view>
+      <view><text class="muted">版费</text><text>¥{{item.customerPatternFee || item.patternFeeTotal || 0}}</text></view>
+      <view><text class="muted">其他费用</text><text>¥{{item.otherChargeTotal}}</text></view>
+      <view><text class="muted">应收小计</text><text class="subtotal">¥{{item.receivableTotal}}</text></view>
+    </view>
+  </view>
+
+  <view class="action-bar">
+    <button wx:if="{{statement.status === 'pending_payment'}}" class="danger-button action-button" loading="{{loading}}" bindtap="returnAll">退回整单</button>
+    <button class="secondary-button action-button" loading="{{loading}}" bindtap="download">下载对账单</button>
+    <button wx:if="{{statement.status === 'pending_payment'}}" class="primary-button action-button" loading="{{loading}}" bindtap="markPaid">标记已收款</button>
+    <button wx:elif="{{statement.status === 'paid'}}" class="danger-button action-button" loading="{{loading}}" bindtap="undoPaid">取消确认收款</button>
+  </view>
+</view>
+<view class="empty" wx:elif="{{loading}}">正在加载对账单…</view>

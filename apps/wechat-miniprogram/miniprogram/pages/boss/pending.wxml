@@ -1,0 +1,41 @@
+<test-mode-return />
+<view class="page pending-page">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <input class="input search" placeholder="搜索款号 / 款名 / 客户 / 客户业务员" value="{{search}}" bindinput="onSearch" />
+  <view class="filter-grid">
+    <picker range="{{statusOptions}}" value="{{statusIndex}}" bindchange="onStatusChange"><view class="picker">{{statusOptions[statusIndex]}}</view></picker>
+    <picker range="{{customerOptions}}" value="{{customerIndex}}" bindchange="onCustomerChange"><view class="picker">{{customerOptions[customerIndex]}}</view></picker>
+    <picker range="{{salespersonOptions}}" value="{{salespersonIndex}}" bindchange="onSalespersonChange"><view class="picker">{{salespersonOptions[salespersonIndex]}}</view></picker>
+  </view>
+
+  <view class="card pricing-card" wx:for="{{rows}}" wx:key="order.id">
+    <view class="pricing-card-main">
+      <image wx:if="{{item.thumbnailPath}}" class="style-thumbnail" src="{{item.thumbnailPath}}" mode="aspectFill" />
+      <view wx:else class="style-thumbnail thumbnail-placeholder">款</view>
+      <view class="pricing-card-copy">
+        <view class="card-head">
+          <view><text class="subtitle">{{item.order.styleNo}}</text><text class="description">{{item.order.styleName}}</text></view>
+          <text class="status-tag {{item.statusLabel === '已定价' ? 'done' : ''}}">{{item.statusLabel}}</text>
+        </view>
+        <view class="row"><text class="muted">客户</text><text>{{item.order.customerName}}</text></view>
+        <view class="row"><text class="muted">客户业务员</text><text>{{item.order.salespersonName || '-'}}</text></view>
+        <view class="row"><text class="muted">数量 / 交期</text><text>{{item.order.quantity}} / {{item.order.deliveryDate}}</text></view>
+      </view>
+    </view>
+    <view class="task-line"><text wx:for="{{item.orderTasks}}" wx:key="key" class="task-tag">{{item.label}}</text></view>
+    <view class="row"><text class="muted">应收合计</text><text class="money">¥{{item.summary.receivableTotal}}</text></view>
+    <view class="card-actions">
+      <view class="select-box {{item.selected ? 'selected' : ''}} {{!item.reconciliationEligibility.eligible ? 'disabled' : ''}}" data-id="{{item.order.id}}" bindtap="toggleRow">
+        <text class="check">{{item.selected ? '✓' : ''}}</text>{{item.selected ? '已选择' : item.eligibilityLabel}}
+      </view>
+      <button size="mini" class="link-button" data-id="{{item.order.id}}" bindtap="openPricing">定价详情</button>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{loading && !rows.length}}">正在加载待对账订单…</view>
+  <view class="empty" wx:if="{{!loading && !rows.length}}">没有符合筛选条件的订单</view>
+  <view class="bottom-action">
+    <text>已选 {{selectedIds.length}} 单</text>
+    <button class="primary-button create-button" loading="{{loading}}" disabled="{{!selectedIds.length || loading}}" bindtap="createStatement">生成对账单</button>
+  </view>
+</view>

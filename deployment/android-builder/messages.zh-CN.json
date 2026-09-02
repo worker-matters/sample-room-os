@@ -1,0 +1,16 @@
+{
+  "title": "样品间安卓安装包生成工具",
+  "noPaths": "你不需要填写 Java 或安卓开发工具的目录。",
+  "autoDetect": "本工具会自动寻找 Android Studio 已安装的组件。",
+  "success": "生成成功：",
+  "nextStep": "下一步：安装 APK，在登录页打开网络设置并扫描 System Owner 生成的配置二维码。",
+  "failed": "安装包生成未完成。",
+  "missingSdkReason": "原因：这台电脑还没有准备好安卓生成环境。",
+  "missingSdkNext": "下一步：安装 Android Studio，首次打开时完成默认安装，然后重新双击“生成安卓安装包.cmd”。",
+  "missingJavaReason": "原因：没有找到合适的 Java 组件。",
+  "missingJavaNext": "下一步：安装或更新 Android Studio，然后重新运行。你不需要手工查找 Java 目录。",
+  "incompleteReason": "原因：工具包缺少必要文件。",
+  "incompleteNext": "下一步：重新解压完整压缩包后再试。",
+  "otherReason": "原因：{0}",
+  "otherNext": "下一步：保留本窗口截图，并检查网络和 Android Studio 后重试。"
+}

@@ -1,0 +1,29 @@
+<test-mode-return />
+<view class="page statements-page">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <input class="input search" placeholder="搜索对账单号 / 客户 / 客户业务员" value="{{search}}" bindinput="onSearch" />
+  <view class="filter-grid">
+    <picker range="{{customerOptions}}" value="{{customerIndex}}" bindchange="onCustomerChange"><view class="picker">{{customerOptions[customerIndex]}}</view></picker>
+    <picker range="{{salespersonOptions}}" value="{{salespersonIndex}}" bindchange="onSalespersonChange"><view class="picker">{{salespersonOptions[salespersonIndex]}}</view></picker>
+  </view>
+  <view class="status-filters">
+    <view class="{{status === 'all' ? 'active' : ''}}" data-status="all" bindtap="chooseStatus">全部</view>
+    <view class="{{status === 'pending_payment' ? 'active' : ''}}" data-status="pending_payment" bindtap="chooseStatus">待付款</view>
+    <view class="{{status === 'paid' ? 'active' : ''}}" data-status="paid" bindtap="chooseStatus">已收款</view>
+    <view class="{{status === 'returned' ? 'active' : ''}}" data-status="returned" bindtap="chooseStatus">已退回</view>
+  </view>
+
+  <view class="card statement-card" wx:for="{{statements}}" wx:key="id" data-id="{{item.id}}" bindtap="openStatement">
+    <view class="statement-icon">账</view>
+    <view class="statement-copy">
+      <view class="card-head"><text class="subtitle">{{item.statementNo}}</text><text class="status-tag {{item.status}}">{{item.statusLabel}}</text></view>
+      <view class="line">客户：{{item.customerName}}</view>
+      <view class="line">客户业务员：{{item.salespersonName || '-'}}</view>
+      <view class="line muted">账期：{{item.billingPeriod}}</view>
+      <view class="card-foot"><text>{{item.orderCount}} 单</text><text class="money">¥{{item.receivableAmount}}</text><text class="arrow">›</text></view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{loading && !statements.length}}">正在加载对账单…</view>
+  <view class="empty" wx:if="{{!loading && !statements.length}}">暂无符合条件的对账单</view>
+</view>

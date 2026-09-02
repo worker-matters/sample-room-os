@@ -1,0 +1,1250 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  system_owner
+  boss
+  receiver
+  pattern_maker
+  planner
+  client_admin
+  client_business_user
+  worker
+}
+
+enum RecordStatus {
+  active
+  archived
+  disabled
+}
+
+enum AccountType {
+  business
+  worker
+}
+
+enum AccountStatus {
+  active
+  suspended
+  pending
+  archived
+}
+
+enum AccountClientType {
+  web
+  miniapp
+  android
+}
+
+enum WorkerType {
+  cutting
+  sewing
+  qc_delivery
+}
+
+enum WorkerProfileStatus {
+  active
+  inactive
+  ended
+}
+
+enum IdentityQrPurpose {
+  REGISTER_WORKER
+  REGISTER_BUSINESS
+}
+
+enum ClientAccessScope {
+  own
+  customer_all
+}
+
+enum SourceType {
+  client_submission
+  receiver_self_entry
+  internal_manual
+}
+
+enum IntakeStatus {
+  pending_receive
+  received
+  needs_client_supplement
+}
+
+enum OrderStage {
+  pending_receive
+  pattern_waiting
+  pattern_doing
+  cutting_handoff_waiting
+  cutting_waiting
+  cutting_doing
+  sewing_waiting
+  sewing_doing
+  qc_delivery_waiting
+  done
+}
+
+enum PatternStatus {
+  none
+  has
+}
+
+enum PatternSourceType {
+  none
+  customer_provided
+  previous_order
+  same_order_revision
+}
+
+enum MaterialStatus {
+  missing
+  partial
+  complete
+}
+
+enum AttachmentVisibility {
+  client_upload_allowed
+  client_visible
+  internal_only
+}
+
+enum BusinessUserRequestStatus {
+  pending
+  approved
+  rejected
+}
+
+enum ScanAction {
+  pattern_start
+  pattern_finish
+  cutting_start
+  cutting_finish
+  sewing_start
+  sewing_finish
+  qc_delivery_start
+  qc_delivery_finish
+  termination_complete
+}
+
+enum ScanActorType {
+  production_worker
+  internal_account
+}
+
+enum PatternTaskStatus {
+  pending
+  active
+  paused
+  submitted
+  in_progress
+  completed
+  submitted_to_cutting
+}
+
+enum PatternDeliverableType {
+  pattern_file
+  cutting_pattern_file
+  padding_consumption
+  material_consumption
+  zipper_length
+  full_size_pattern
+  layout_diagram
+  print_position
+  embroidery_position
+  process_note
+  revision_note
+  render_3d
+  rotation_video_3d
+  other
+}
+
+enum CuttingInboxStatus {
+  pending_print
+  printed
+  cut
+}
+
+enum BackupStatus {
+  pending
+  running
+  completed
+  failed
+}
+
+enum ReconciliationStatementStatus {
+  pending_payment
+  paid
+  returned
+}
+
+enum PricingQuotationStatus {
+  draft
+  confirmed
+}
+
+enum OrderChargeStatus {
+  pending
+  confirmed
+  rejected
+  cancelled
+  effective
+  void
+}
+
+enum PricingItemSourceType {
+  system_recommended
+  manual
+  evidence
+  legacy
+}
+
+enum InternalCostCategory {
+  pattern
+  cutting
+  sewing
+  finishing
+  material
+  other
+}
+
+enum CustomerChargePricingMethod {
+  fixed
+  unit_quantity
+}
+
+enum RecoveryPointKind {
+  manual
+  daily_backup
+  monthly_snapshot
+  pre_update
+  pre_restore
+  pre_storage_migration
+}
+
+enum RecoveryPointStatus {
+  pending
+  creating
+  completed
+  verified
+  failed
+}
+
+enum LifecycleJobAction {
+  create_recovery_point
+  restore_recovery_point
+  preflight_update
+  apply_update
+  migrate_storage
+  diagnostic
+}
+
+enum LifecycleJobStatus {
+  queued
+  claimed
+  running
+  completed
+  failed
+  cancelled
+}
+
+enum LifecycleArtifactKind {
+  database_dump
+  file_archive
+  config_snapshot
+  manifest
+}
+
+model Account {
+  id                            String        @id @default(cuid())
+  username                      String?       @unique
+  phoneNumber                   String?
+  displayName                   String
+  accountType                   AccountType
+  role                          Role
+  passwordHash                  String
+  status                        AccountStatus @default(pending)
+  mustChangePasswordAtNextLogin Boolean       @default(false)
+  lastPasswordResetAt           DateTime?
+  lastLoginAt                   DateTime?
+  receiverQrPrintSettings       Json?
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  clientProfiles          ClientUser[]         @relation("ClientUserAccount")
+  workerProfiles          WorkerProfile[]
+  sessions                AccountSession[]
+  wechatIdentity          WechatIdentity?
+  scanRecords             ScanRecord[]
+  registeredComplaints    OrderComplaint[]     @relation("OrderComplaintRegisteredBy")
+  correctionLogs          OrderCorrectionLog[]
+  patternTasks            PatternTask[]
+  operationLogs           OperationLog[]
+  issuedIdentityQrTokens  IdentityQrToken[]    @relation("IdentityQrTokenIssuedBy")
+  usedIdentityQrTokens    IdentityQrToken[]    @relation("IdentityQrTokenUsedBy")
+  revokedIdentityQrTokens IdentityQrToken[]    @relation("IdentityQrTokenRevokedBy")
+
+  @@index([role])
+  @@index([accountType])
+  @@index([phoneNumber])
+  @@index([status])
+}
+
+model Customer {
+  id          String       @id @default(cuid())
+  name        String
+  code        String?      @unique
+  contactName String?
+  phone       String?
+  address     String?
+  status      RecordStatus @default(active)
+  archivedAt  DateTime?
+  archivedBy  String?
+  deletedAt   DateTime?
+  deletedBy   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  clientUsers          ClientUser[]
+  orders               Order[]
+  businessUserRequests BusinessUserRequest[]
+
+  @@index([status])
+}
+
+model ClientUser {
+  id                String            @id @default(cuid())
+  customerId        String
+  accountId         String?           @unique
+  displayName       String
+  contact           String?
+  status            RecordStatus      @default(active)
+  clientAccessScope ClientAccessScope @default(own)
+  archivedAt        DateTime?
+  archivedBy        String?
+  deletedAt         DateTime?
+  deletedBy         String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  customer                      Customer              @relation(fields: [customerId], references: [id])
+  account                       Account?              @relation("ClientUserAccount", fields: [accountId], references: [id])
+  orders                        Order[]
+  requestedBusinessUserRequests BusinessUserRequest[] @relation("BusinessUserRequestRequestedBy")
+  createdBusinessUserRequests   BusinessUserRequest[] @relation("BusinessUserRequestCreatedClientUser")
+
+  @@index([customerId])
+  @@index([customerId, clientAccessScope])
+  @@index([customerId, status])
+  @@index([customerId, contact])
+}
+
+model Order {
+  id                        String            @id @default(cuid())
+  orderNo                   String            @unique
+  folderCode                String            @unique
+  sourceType                SourceType
+  sourceOrderId             String?
+  sourcePatternVersionId    String?
+  customerId                String
+  clientUserId              String
+  customerName              String?
+  salespersonId             String?
+  salespersonName           String?
+  customerSnapshot          Json
+  clientUserSnapshot        Json?
+  styleNo                   String
+  styleName                 String
+  quantity                  Int
+  sampleType                String
+  sampleRound               String
+  /// Alpha treats deliveryDate as a date-only business value.
+  deliveryDate              DateTime?         @db.Date
+  remark                    String?
+  taskInstructionNote       String?
+  intakeStatus              IntakeStatus      @default(pending_receive)
+  stage                     OrderStage?
+  patternStatus             PatternStatus     @default(none)
+  patternSourceType         PatternSourceType @default(none)
+  sampleRequestItems        String[]          @default(["sample_garment", "pattern_making"])
+  sampleGarmentRequired     Boolean           @default(true)
+  fabricStatus              MaterialStatus    @default(missing)
+  trimStatus                MaterialStatus    @default(missing)
+  latestPatternVersion      String?
+  cuttingUsedPatternVersion String?
+  receivedAt                DateTime?
+  receivedBy                String?
+  returnReason              String?
+  returnedAt                DateTime?
+  returnedBy                String?
+  supplementCount           Int               @default(0)
+  supplementedAt            DateTime?
+  terminated                Boolean           @default(false)
+  terminatedAt              DateTime?
+  terminatedBy              String?
+  terminatedByName          String?
+  terminationReason         String?
+  statusBeforeTermination   String?
+  stageAtTermination        OrderStage?
+  createdBy                 String?
+  createdAt                 DateTime          @default(now())
+  updatedAt                 DateTime          @updatedAt
+  archivedAt                DateTime?
+
+  customer                 Customer                  @relation(fields: [customerId], references: [id])
+  clientUser               ClientUser                @relation(fields: [clientUserId], references: [id])
+  statusLogs               OrderStatusLog[]
+  correctionLogs           OrderCorrectionLog[]
+  attachments              OrderAttachment[]
+  attachmentAuditLogs      AttachmentAuditLog[]
+  scanTokens               ScanToken[]
+  scanRecords              ScanRecord[]
+  orderFolder              OrderFolder?
+  patternTask              PatternTask?
+  submittedCuttingVersions SubmittedCuttingVersion[]
+  patternDeliverables      PatternDeliverable[]
+  pricingRecord            PricingRecord?
+  orderCharges             OrderCharge[]
+  complaints               OrderComplaint[]
+
+  @@index([customerId])
+  @@index([sourceOrderId])
+  @@index([clientUserId])
+  @@index([intakeStatus])
+  @@index([stage])
+  @@index([terminated])
+  @@index([terminatedAt])
+  @@index([customerId, clientUserId])
+  @@index([customerId, intakeStatus])
+  @@index([createdAt])
+  @@index([deliveryDate])
+}
+
+model OrderStatusLog {
+  id         String   @id @default(cuid())
+  orderId    String
+  fromStage  String?
+  toStage    String?
+  fromIntake String?
+  toIntake   String?
+  changedBy  String?
+  reason     String?
+  payload    Json?
+  createdAt  DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@index([createdAt])
+}
+
+model OrderCorrectionLog {
+  id                 String   @id @default(cuid())
+  orderId            String
+  changedAt          DateTime @default(now())
+  changedByRole      Role
+  changedByAccountId String
+  changedByName      String?
+  fieldName          String
+  oldValue           Json?
+  newValue           Json?
+
+  order            Order   @relation(fields: [orderId], references: [id])
+  changedByAccount Account @relation(fields: [changedByAccountId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([changedAt])
+  @@index([orderId, changedAt])
+}
+
+model OrderAttachment {
+  id                  String               @id @default(cuid())
+  orderId             String
+  category            String
+  visibility          AttachmentVisibility
+  fileName            String
+  storageKey          String?
+  contentType         String?
+  sizeBytes           Int?
+  checksum            String?
+  uploadedBy          String?
+  uploadedByRole      Role?
+  uploadedByName      String?
+  patternTaskId       String?
+  patternTaskCategory String?
+  orderChargeId       String?
+  createdAt           DateTime             @default(now())
+  archivedAt          DateTime?
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@index([visibility])
+  @@index([uploadedBy])
+  @@index([patternTaskId])
+  @@index([orderChargeId])
+  @@index([createdAt])
+}
+
+model OrderComplaint {
+  id                    String   @id @default(cuid())
+  orderId               String
+  description           String
+  qcScanRecordId        String?
+  qcWorkerProfileId     String?
+  qcWorkerNameSnapshot  String?
+  registeredByAccountId String
+  registeredByName      String
+  createdAt             DateTime @default(now())
+
+  order           Order          @relation(fields: [orderId], references: [id])
+  qcWorkerProfile WorkerProfile? @relation(fields: [qcWorkerProfileId], references: [id])
+  registeredBy    Account        @relation("OrderComplaintRegisteredBy", fields: [registeredByAccountId], references: [id])
+
+  @@index([orderId, createdAt])
+  @@index([qcWorkerProfileId, createdAt])
+  @@index([registeredByAccountId, createdAt])
+  @@index([qcScanRecordId])
+}
+
+model AttachmentAuditLog {
+  id                   String   @id @default(cuid())
+  orderId              String
+  attachmentId         String
+  originalFileName     String
+  newFileName          String?
+  action               String
+  actorId              String
+  actorName            String?
+  actorRole            Role
+  originalUploaderId   String
+  originalUploaderName String?
+  originalUploaderRole Role
+  attachmentCategory   String
+  sourceCategory       String?
+  patternTaskId        String?
+  patternTaskCategory  String?
+  orderChargeId        String?
+  createdAt            DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId, createdAt])
+  @@index([attachmentId])
+  @@index([actorId])
+  @@index([orderChargeId])
+}
+
+model BusinessUserRequest {
+  id                      String                    @id @default(cuid())
+  customerId              String
+  customerName            String
+  requestedByClientUserId String
+  requestedByName         String
+  businessUserName        String
+  contact                 String
+  roleNote                String?
+  note                    String?
+  source                  String                    @default("supervisor_request")
+  requestedUsername       String?
+  requestedPasswordHash   String?
+  status                  BusinessUserRequestStatus @default(pending)
+  createdAt               DateTime                  @default(now())
+  reviewedAt              DateTime?
+  reviewedBy              String?
+  reviewedByRole          Role?
+  reviewNote              String?
+  createdClientUserId     String?
+
+  customer              Customer    @relation(fields: [customerId], references: [id])
+  requestedByClientUser ClientUser  @relation("BusinessUserRequestRequestedBy", fields: [requestedByClientUserId], references: [id])
+  createdClientUser     ClientUser? @relation("BusinessUserRequestCreatedClientUser", fields: [createdClientUserId], references: [id])
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdClientUserId])
+  @@index([customerId, contact])
+}
+
+model WorkerProfile {
+  id          String              @id @default(cuid())
+  accountId   String
+  workerType  WorkerType
+  status      WorkerProfileStatus @default(active)
+  effectiveAt DateTime            @default(now())
+  endedAt     DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  account      Account          @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  scanRecords  ScanRecord[]
+  qcComplaints OrderComplaint[]
+
+  @@index([accountId, status])
+  @@index([workerType, status])
+  @@unique([accountId, workerType])
+}
+
+model AccountSession {
+  id               String            @id @default(cuid())
+  accountId        String
+  sessionTokenHash String            @unique
+  clientType       AccountClientType
+  deviceIdHash     String?
+  deviceLabel      String?
+  userAgent        String?
+  appVersion       String?
+  createdAt        DateTime          @default(now())
+  lastSeenAt       DateTime?
+  expiresAt        DateTime
+  revokedAt        DateTime?
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, revokedAt, expiresAt])
+  @@index([deviceIdHash])
+  @@index([expiresAt])
+}
+
+model WechatIdentity {
+  id          String    @id @default(cuid())
+  accountId   String    @unique
+  openIdHash  String    @unique
+  createdAt   DateTime  @default(now())
+  lastLoginAt DateTime?
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+}
+
+model IdentityQrToken {
+  id                 String            @id @default(cuid())
+  tokenHash          String            @unique
+  purpose            IdentityQrPurpose
+  initialRole        Role?
+  workerType         WorkerType?
+  issuedByAccountId  String
+  usedByAccountId    String?
+  revokedByAccountId String?
+  expiresAt          DateTime
+  usedAt             DateTime?
+  revokedAt          DateTime?
+  createdAt          DateTime          @default(now())
+
+  issuedBy  Account  @relation("IdentityQrTokenIssuedBy", fields: [issuedByAccountId], references: [id], onDelete: Restrict)
+  usedBy    Account? @relation("IdentityQrTokenUsedBy", fields: [usedByAccountId], references: [id], onDelete: Restrict)
+  revokedBy Account? @relation("IdentityQrTokenRevokedBy", fields: [revokedByAccountId], references: [id], onDelete: Restrict)
+
+  @@index([purpose, expiresAt])
+  @@index([issuedByAccountId, expiresAt])
+  @@index([usedByAccountId])
+  @@index([revokedByAccountId])
+}
+
+model ScanToken {
+  id        String      @id @default(cuid())
+  orderId   String
+  token     String      @unique
+  stage     OrderStage?
+  createdAt DateTime    @default(now())
+  expiresAt DateTime?
+  revokedAt DateTime?
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@index([stage])
+}
+
+model ScanRecord {
+  id                String        @id @default(cuid())
+  orderId           String
+  actorAccountId    String
+  workerProfileId   String?
+  actorNameSnapshot String?
+  actorType         ScanActorType @default(production_worker)
+  actorRole         Role
+  tokenId           String?
+  action            ScanAction
+  stage             OrderStage
+  scannedAt         DateTime      @default(now())
+  workHours         Float?
+  pieces            Int?
+  note              String?
+  source            String        @default("scan")
+  payload           Json?
+
+  order         Order          @relation(fields: [orderId], references: [id])
+  actorAccount  Account        @relation(fields: [actorAccountId], references: [id], onDelete: Restrict)
+  workerProfile WorkerProfile? @relation(fields: [workerProfileId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([actorAccountId])
+  @@index([workerProfileId])
+  @@index([actorType])
+  @@index([actorRole])
+  @@index([tokenId])
+  @@index([action])
+  @@index([stage])
+  @@index([scannedAt])
+}
+
+model OrderFolder {
+  id                   String   @id @default(cuid())
+  orderId              String   @unique
+  year                 String
+  customerSegment      String
+  folderName           String
+  rootPath             String
+  relativePath         String
+  displayPath          String
+  patternWorkPath      String
+  markerWorkPath       String
+  submittedCuttingPath String
+  measurementPath      String
+  samplePhotoPath      String
+  outboundPhotoPath    String
+  oldVersionPath       String
+  readmePath           String
+  createdBy            String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  order        Order         @relation(fields: [orderId], references: [id])
+  patternTasks PatternTask[]
+
+  @@index([year])
+  @@index([customerSegment])
+}
+
+model PatternTask {
+  id                          String            @id @default(cuid())
+  orderId                     String            @unique
+  status                      PatternTaskStatus @default(pending)
+  requirements                String[]          @default([])
+  completedRequirements       String[]          @default([])
+  totalWorkHours              Float?
+  completionNote              String?
+  patternMakerAccountId       String?
+  patternMakerName            String?
+  internalName                String?
+  linkedPatternLibraryEntryId String?
+  orderFolderId               String?
+  note                        String?
+  pausedAt                    DateTime?
+  pausedReason                String?
+  startedAt                   DateTime?
+  completedAt                 DateTime?
+  submittedAt                 DateTime?
+  createdAt                   DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
+
+  order                Order                     @relation(fields: [orderId], references: [id])
+  patternMakerAccount  Account?                  @relation(fields: [patternMakerAccountId], references: [id], onDelete: SetNull)
+  orderFolder          OrderFolder?              @relation(fields: [orderFolderId], references: [id])
+  linkedPatternLibrary PatternLibraryEntry?      @relation(fields: [linkedPatternLibraryEntryId], references: [id])
+  submittedVersions    SubmittedCuttingVersion[]
+  deliverables         PatternDeliverable[]
+
+  @@index([status])
+  @@index([patternMakerAccountId])
+  @@index([patternMakerAccountId, status])
+  @@index([orderFolderId])
+  @@index([linkedPatternLibraryEntryId])
+}
+
+model PatternDeliverable {
+  id             String                 @id @default(cuid())
+  orderId        String
+  patternTaskId  String
+  version        String
+  type           PatternDeliverableType
+  fileName       String?
+  mimeType       String?
+  size           Int?
+  storageKey     String?
+  textValue      String?
+  structuredData Json?
+  visibility     AttachmentVisibility   @default(internal_only)
+  uploadedBy     String
+  uploadedByName String?
+  taskCategory   String?
+  archivedAt     DateTime?
+  createdAt      DateTime               @default(now())
+
+  order       Order       @relation(fields: [orderId], references: [id])
+  patternTask PatternTask @relation(fields: [patternTaskId], references: [id])
+
+  @@index([orderId])
+  @@index([patternTaskId])
+  @@index([version])
+  @@index([type])
+}
+
+model PatternLibraryEntry {
+  id             String   @id @default(cuid())
+  customerId     String?
+  customerName   String?
+  styleNo        String
+  styleName      String?
+  patternVersion String
+  fileName       String
+  localPath      String?
+  storageKey     String?
+  note           String?
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  patternTasks PatternTask[]
+
+  @@index([customerId])
+  @@index([styleNo])
+  @@index([createdAt])
+}
+
+model SubmittedCuttingVersion {
+  id                   String             @id @default(cuid())
+  orderId              String
+  patternTaskId        String
+  version              String
+  submittedBy          String
+  submittedByName      String?
+  submittedAt          DateTime
+  purpose              String             @default("cutting_handoff")
+  orderFolderPath      String
+  submittedCuttingPath String
+  cuttingInboxPath     String
+  status               CuttingInboxStatus @default(pending_print)
+  statusUpdatedAt      DateTime?
+  printedAt            DateTime?
+  cutAt                DateTime?
+  note                 String?
+  workHours            Float?
+
+  order       Order                  @relation(fields: [orderId], references: [id])
+  patternTask PatternTask            @relation(fields: [patternTaskId], references: [id])
+  files       SubmittedCuttingFile[]
+
+  @@unique([orderId, version])
+  @@index([patternTaskId])
+  @@index([status])
+  @@index([submittedAt])
+}
+
+model SubmittedCuttingFile {
+  id           String   @id @default(cuid())
+  submissionId String
+  fileName     String
+  localPath    String
+  sizeBytes    Int?
+  createdAt    DateTime @default(now())
+
+  submission SubmittedCuttingVersion @relation(fields: [submissionId], references: [id])
+
+  @@index([submissionId])
+}
+
+model PricingRecord {
+  id                          String                 @id @default(cuid())
+  orderId                     String                 @unique
+  quotedPrice                 Decimal?
+  customerPatternFee          Decimal?
+  internalPatternCost         Decimal?
+  internalCuttingCost         Decimal?
+  internalSewingCost          Decimal?
+  internalFinishingCost       Decimal?
+  finishingPiecesSnapshot     Int?
+  finishingNote               String?
+  quotationStatus             PricingQuotationStatus @default(draft)
+  confirmedAt                 DateTime?
+  confirmedBy                 String?
+  confirmedByName             String?
+  confirmedSampleUnitPrice    Decimal?
+  confirmedSampleAmount       Decimal?
+  confirmedCustomerPatternFee Decimal?
+  confirmedOtherChargeTotal   Decimal?
+  confirmedOtherChargeNote    String?
+  confirmedReceivableTotal    Decimal?
+  confirmedCustomerChargeSnapshot Json?
+  confirmedInternalCostSnapshot   Json?
+  confirmedOtherChargeSnapshot    Json?
+  confirmedCustomerQuoteSubtotal  Decimal?
+  confirmedBaseInternalCost       Decimal?
+  confirmedInternalCostTotal      Decimal?
+  confirmedGrossProfit            Decimal?
+  confirmedGrossMargin            Decimal?
+  recommendationsInitializedAt    DateTime?
+  costAmount                  Decimal?
+  note                        String?
+  createdBy                   String?
+  createdAt                   DateTime               @default(now())
+  updatedAt                   DateTime               @updatedAt
+
+  order        Order         @relation(fields: [orderId], references: [id])
+  extraCharges ExtraCharge[]
+  internalCostItems InternalCostItem[]
+  customerChargeItems CustomerChargeItem[]
+}
+
+model InternalCostItem {
+  id              String               @id @default(cuid())
+  pricingRecordId String
+  name            String
+  category        InternalCostCategory
+  sourceType      PricingItemSourceType
+  sourceTask      String?
+  amount          Decimal
+  note            String?
+  createdBy       String?
+  updatedBy       String?
+  archivedAt      DateTime?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  pricingRecord PricingRecord @relation(fields: [pricingRecordId], references: [id], onDelete: Cascade)
+
+  @@index([pricingRecordId, archivedAt])
+  @@index([category])
+}
+
+model CustomerChargeItem {
+  id              String                      @id @default(cuid())
+  pricingRecordId String
+  name            String
+  pricingMethod   CustomerChargePricingMethod
+  unitPrice       Decimal?
+  quantity        Decimal?
+  amount          Decimal
+  sourceType      PricingItemSourceType
+  sourceTask      String?
+  note            String?
+  createdBy       String?
+  updatedBy       String?
+  archivedAt      DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+
+  pricingRecord PricingRecord @relation(fields: [pricingRecordId], references: [id], onDelete: Cascade)
+
+  @@index([pricingRecordId, archivedAt])
+  @@index([pricingMethod])
+}
+
+model ExtraCharge {
+  id              String   @id @default(cuid())
+  pricingRecordId String
+  label           String
+  amount          Decimal
+  note            String?
+  createdAt       DateTime @default(now())
+
+  pricingRecord PricingRecord @relation(fields: [pricingRecordId], references: [id])
+
+  @@index([pricingRecordId])
+}
+
+model OrderCharge {
+  id             String            @id @default(cuid())
+  orderId        String
+  name           String
+  amount         Decimal
+  explanation    String
+  sourceScene    String
+  creatorId      String
+  creatorName    String?
+  creatorRole    Role
+  status         OrderChargeStatus @default(pending)
+  reviewedAt     DateTime?
+  reviewedBy     String?
+  reviewedByName String?
+  reviewedByRole Role?
+  rejectedAt     DateTime?
+  rejectedBy     String?
+  rejectedByName String?
+  rejectedByRole Role?
+  rejectionReason String?
+  cancelledAt     DateTime?
+  cancelledBy     String?
+  cancelledByName String?
+  cancelledByRole Role?
+  cancelReason    String?
+  archivedAt      DateTime?
+  voidedAt       DateTime?
+  voidedBy       String?
+  voidedByName   String?
+  voidedByRole   Role?
+  voidReason     String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId, status])
+  @@index([createdAt])
+  @@index([creatorId])
+}
+
+model ReconciliationStatement {
+  id               String                        @id @default(cuid())
+  statementNo      String                        @unique
+  customerName     String
+  salespersonName  String
+  billingPeriod    String
+  orderCount       Int
+  receivableAmount Decimal
+  paidAmount       Decimal                       @default(0)
+  status           ReconciliationStatementStatus @default(pending_payment)
+  generatedAt      DateTime                      @default(now())
+  generatedBy      String?
+  paidAt           DateTime?
+  paidBy           String?
+  returnedAt       DateTime?
+  returnedBy       String?
+
+  items ReconciliationStatementItem[]
+
+  @@index([status])
+  @@index([generatedAt])
+  @@index([customerName])
+  @@index([salespersonName])
+}
+
+model ReconciliationStatementItem {
+  id                 String    @id @default(cuid())
+  statementId        String
+  orderId            String
+  orderNo            String
+  styleNo            String
+  styleName          String
+  customerName       String
+  salespersonName    String
+  quantity           Int
+  quotedPrice        Decimal
+  sampleAmount       Decimal
+  patternFeeTotal    Decimal   @default(0)
+  customerPatternFee Decimal   @default(0)
+  otherChargeTotal   Decimal
+  otherChargeNote    String?
+  customerChargeSnapshot Json?
+  receivableTotal    Decimal
+  internalCostSnapshot Json?
+  internalBaseCost   Decimal?
+  internalPatternCost Decimal?
+  internalCuttingCost Decimal?
+  internalSewingCost Decimal?
+  internalFinishingCost Decimal?
+  internalTotalCost  Decimal?
+  remark             String?
+  orderStatusLabel   String?
+  generatedAt        DateTime  @default(now())
+  returnedAt         DateTime?
+  returnedBy         String?
+
+  statement ReconciliationStatement @relation(fields: [statementId], references: [id])
+
+  @@index([statementId])
+  @@index([orderId])
+  @@index([returnedAt])
+}
+
+model OperationLog {
+  id             String   @id @default(cuid())
+  actorAccountId String?
+  actorRole      Role?
+  action         String
+  targetType     String?
+  targetId       String?
+  before         Json?
+  after          Json?
+  payload        Json?
+  ip             String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+
+  actorAccount Account? @relation(fields: [actorAccountId], references: [id], onDelete: SetNull)
+
+  @@index([actorAccountId])
+  @@index([actorRole])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
+model BackupRecord {
+  id          String       @id @default(cuid())
+  fileName    String
+  storageKey  String
+  status      BackupStatus @default(pending)
+  requestedBy String?
+  createdAt   DateTime     @default(now())
+  completedAt DateTime?
+  error       String?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model RecoveryPoint {
+  id                   String              @id @default(cuid())
+  kind                 RecoveryPointKind
+  status               RecoveryPointStatus @default(pending)
+  createdByActorId     String
+  createdByName        String
+  createdByRole        String
+  requestReason        String
+  appVersion           String
+  schemaFingerprint    String
+  postgresVersion      String
+  storageLayoutVersion String
+  packageDigest        String?
+  totalSizeBytes       BigInt              @default(0)
+  retentionDays        Int?
+  retainUntil          DateTime?
+  retentionProtected   Boolean             @default(false)
+  createdAt            DateTime            @default(now())
+  completedAt          DateTime?
+  verifiedAt           DateTime?
+  failedAt             DateTime?
+  failureCode          String?
+  failureReason        String?
+
+  artifacts RecoveryPointArtifact[]
+  jobs      LifecycleJob[]
+
+  @@index([status, createdAt])
+  @@index([kind, createdAt])
+  @@index([retainUntil])
+}
+
+model RecoveryPointArtifact {
+  id                 String                @id @default(cuid())
+  recoveryPointId    String
+  kind               LifecycleArtifactKind
+  relativeName       String
+  sizeBytes          BigInt
+  sha256             String
+  verificationStatus String                @default("pending")
+  createdAt          DateTime              @default(now())
+
+  recoveryPoint RecoveryPoint @relation(fields: [recoveryPointId], references: [id], onDelete: Cascade)
+
+  @@unique([recoveryPointId, relativeName])
+  @@index([recoveryPointId, createdAt])
+  @@index([sha256])
+}
+
+model UpdateArtifact {
+  id                       String    @id @default(cuid())
+  version                  String
+  digest                   String    @unique
+  manifestSummary          Json
+  compatibilityInformation Json
+  discoveredAt             DateTime  @default(now())
+  verifiedAt               DateTime?
+  status                   String    @default("discovered")
+  failureReason            String?
+
+  jobs LifecycleJob[]
+
+  @@index([version, discoveredAt])
+  @@index([status, discoveredAt])
+}
+
+model StorageMigrationPlan {
+  id                  String    @id @default(cuid())
+  requestedByActorId  String
+  requestedByName     String
+  requestedByRole     String
+  targetPathProtected String
+  targetDisplayName   String
+  preflightSummary    Json
+  status              String    @default("prepared")
+  createdAt           DateTime  @default(now())
+  verifiedAt          DateTime?
+  completedAt         DateTime?
+  failedAt            DateTime?
+  failureReason       String?
+
+  @@index([status, createdAt])
+}
+
+model LifecycleJob {
+  id                 String             @id @default(cuid())
+  action             LifecycleJobAction
+  status             LifecycleJobStatus @default(queued)
+  requestedByActorId String
+  requestedByName    String
+  requestedByRole    String
+  requestReason      String
+  idempotencyKey     String             @unique
+  parameters         Json
+  recoveryPointId    String?
+  updateArtifactId   String?
+  executorId         String?
+  leaseExpiresAt     DateTime?
+  heartbeatAt        DateTime?
+  startedAt          DateTime?
+  completedAt        DateTime?
+  failedAt           DateTime?
+  errorCode          String?
+  errorMessage       String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  recoveryPoint   RecoveryPoint?      @relation(fields: [recoveryPointId], references: [id], onDelete: Restrict)
+  updateArtifact  UpdateArtifact?     @relation(fields: [updateArtifactId], references: [id], onDelete: Restrict)
+  events          LifecycleJobEvent[]
+  maintenanceLock MaintenanceLock[]
+
+  @@index([status, createdAt])
+  @@index([action, createdAt])
+  @@index([recoveryPointId])
+  @@index([updateArtifactId])
+  @@index([executorId, leaseExpiresAt])
+}
+
+model LifecycleJobEvent {
+  id                 String   @id @default(cuid())
+  jobId              String
+  eventType          String
+  phase              String?
+  progress           Int?
+  message            String
+  actorIdSnapshot    String?
+  actorNameSnapshot  String?
+  actorRoleSnapshot  String?
+  executorIdSnapshot String?
+  structuredMetadata Json?
+  createdAt          DateTime @default(now())
+
+  job LifecycleJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt, id])
+}
+
+model MaintenanceLock {
+  scope          String    @id
+  currentJobId   String?
+  executorId     String?
+  leaseExpiresAt DateTime?
+  heartbeatAt    DateTime?
+  acquiredAt     DateTime?
+  updatedAt      DateTime  @updatedAt
+
+  currentJob LifecycleJob? @relation(fields: [currentJobId], references: [id], onDelete: Restrict)
+
+  @@index([currentJobId])
+  @@index([leaseExpiresAt])
+}

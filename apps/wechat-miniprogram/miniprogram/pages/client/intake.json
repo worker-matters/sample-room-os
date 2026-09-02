@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "拍照录入",
+  "usingComponents": {
+    "client-tabs": "/components/client-tabs/index"
+  }
+}

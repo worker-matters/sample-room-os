@@ -1,0 +1,14 @@
+<test-mode-return />
+<client-tabs active="statistics" role="client_admin" />
+<view class="client-page">
+  <view class="client-notice">按同客户业务员汇总订单任务完成情况；点击业务员可返回订单列表并筛选。</view>
+  <view class="client-notice client-error" wx:if="{{message}}">{{message}}</view>
+  <view class="client-empty" wx:if="{{loading}}">正在加载统计…</view>
+  <view class="client-empty" wx:elif="{{!stats.length && !message}}">暂无业务员订单统计</view>
+  <view class="stat-row" wx:for="{{stats}}" wx:key="id" data-id="{{item.id}}" bindtap="openOrders">
+    <text class="stat-name">{{item.name}}</text>
+    <view><text class="client-muted">订单</text><text class="stat-number">{{item.total}}</text></view>
+    <view><text class="client-muted">任务未完成</text><text class="stat-number">{{item.incomplete}}</text></view>
+    <view><text class="client-muted">任务全完成</text><text class="stat-number">{{item.complete}}</text></view>
+  </view>
+</view>

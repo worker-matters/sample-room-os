@@ -1,0 +1,26 @@
+<test-mode-return />
+<view class="page security-page">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <view class="notice success-notice" wx:if="{{successMessage}}">{{successMessage}}</view>
+
+  <text class="section-heading">基本资料</text>
+  <view class="form-card" wx:if="{{profile}}">
+    <view class="form-row" wx:if="{{profile.accountType === 'business'}}"><text>登录用户名</text><input value="{{username}}" data-field="username" bindinput="field" /></view>
+    <view class="form-row" wx:else><text>登录手机号</text><input type="number" value="{{phoneNumber}}" data-field="phoneNumber" bindinput="field" /></view>
+    <view class="form-row"><text>姓名 / 显示名称</text><input value="{{displayName}}" data-field="displayName" bindinput="field" /></view>
+    <view class="form-row" wx:if="{{profile.accountType === 'business'}}"><text>联系电话</text><input type="number" value="{{phoneNumber}}" data-field="phoneNumber" bindinput="field" /></view>
+    <view class="form-row read-only"><text>当前岗位</text><text>{{profile.roleLabel}}</text></view>
+    <view class="form-row password-row"><text>验证当前密码</text><input password placeholder="修改登录信息时填写" value="{{currentPasswordForProfile}}" data-field="currentPasswordForProfile" bindinput="field" /></view>
+  </view>
+  <text class="helper" wx:if="{{profile}}">ⓘ 修改登录用户名或员工手机号后需要重新登录，历史绩效不会改变</text>
+  <button class="primary-button profile-save" loading="{{loading}}" bindtap="saveProfile">保存基本资料</button>
+
+  <text class="section-heading password-heading">修改密码</text>
+  <view class="form-card">
+    <view class="form-row password-row"><text>当前密码</text><input password placeholder="请输入当前密码" value="{{currentPassword}}" data-field="currentPassword" bindinput="field" /></view>
+    <view class="form-row password-row"><text>新密码</text><input password placeholder="至少 8 位" value="{{newPassword}}" data-field="newPassword" bindinput="field" /></view>
+    <view class="form-row password-row"><text>确认新密码</text><input password placeholder="请再次输入新密码" value="{{confirmPassword}}" data-field="confirmPassword" bindinput="field" /></view>
+  </view>
+  <button class="primary-button save-button" loading="{{loading}}" bindtap="savePassword">保存修改</button>
+  <text class="helper">ⓘ 账号身份和历史生产归属不会因修改资料而改变</text>
+</view>

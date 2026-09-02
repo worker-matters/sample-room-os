@@ -1,0 +1,37 @@
+{
+  "name": "@sample-room/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run prisma:generate && tsx watch src/main.ts",
+    "build": "npm run prisma:generate && tsc -p tsconfig.json",
+    "typecheck": "npm run build -w @sample-room/shared && npm run prisma:generate && tsc -p tsconfig.json --noEmit",
+    "test": "npm run prisma:generate && npm run build -w @sample-room/shared && vitest run",
+    "start": "node dist/main.js",
+    "prisma:validate": "prisma validate --schema prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "prisma:migrate:dev": "prisma migrate dev --schema prisma/schema.prisma",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@sample-room/shared": "0.1.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "helmet": "^8.3.0",
+    "multer": "^2.2.0",
+    "node-apk": "1.2.1",
+    "read-excel-file": "^9.3.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^24.0.10",
+    "prisma": "^6.11.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

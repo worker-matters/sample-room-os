@@ -1,0 +1,33 @@
+{
+  "name": "sample-room-os",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sample Room OS is a single-factory sample-room operations system.",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:api": "npm run build -w @sample-room/shared && npm run dev -w @sample-room/api",
+    "dev:web": "npm run build -w @sample-room/shared && npm run dev -w @sample-room/web",
+    "lint": "node scripts/lint.mjs",
+    "typecheck": "npm run typecheck -w @sample-room/shared && npm run typecheck -w @sample-room/api && npm run typecheck -w @sample-room/web && npm run typecheck -w @sample-room/wechat-miniprogram",
+    "build": "npm run build -w @sample-room/shared && npm run build -w @sample-room/api && npm run build -w @sample-room/web",
+    "start": "npm run start -w @sample-room/api",
+    "test": "npm run test -w @sample-room/shared && npm run test -w @sample-room/api && npm run test -w @sample-room/web && npm run test -w @sample-room/wechat-miniprogram && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/tests/Test-ManualAcceptanceStartup.ps1",
+    "pre-pr": "npm run lint && npm run typecheck && npm test && npm run build",
+    "manual:formal:memory": "powershell -ExecutionPolicy Bypass -File scripts/start-manual-acceptance.ps1 -Mode formal-memory",
+    "manual:formal:memory:miniapp": "powershell -ExecutionPolicy Bypass -File scripts/start-manual-acceptance.ps1 -Mode formal-memory -EnableMiniappTestIdentities",
+    "manual:formal:prisma": "powershell -ExecutionPolicy Bypass -File scripts/start-manual-acceptance.ps1 -Mode formal-prisma",
+    "manual:dev:memory": "powershell -ExecutionPolicy Bypass -File scripts/start-manual-acceptance.ps1 -Mode dev-memory",
+    "manual:dev:prisma": "powershell -ExecutionPolicy Bypass -File scripts/start-manual-acceptance.ps1 -Mode dev-prisma",
+    "manual:info": "powershell -ExecutionPolicy Bypass -File scripts/print-manual-acceptance-info.ps1",
+    "manual:stop": "powershell -ExecutionPolicy Bypass -File scripts/stop-manual-acceptance.ps1",
+    "check:storage": "powershell -ExecutionPolicy Bypass -File scripts/check-storage.ps1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

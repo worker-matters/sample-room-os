@@ -1,0 +1,86 @@
+<test-mode-return />
+<view class="page">
+  <view class="card" wx:if="{{!state}}">
+    <text class="title">扫描订单二维码</text>
+    <text class="description">扫描订单流转码，查看当前订单和工序状态。</text>
+    <button class="primary-button" loading="{{loading}}" bindtap="scanOrderQr">扫描订单二维码</button>
+  </view>
+
+  <view class="card">
+    <view class="row"><text class="muted">当前网络</text><text>{{apiModeLabel}}</text></view>
+    <view class="row"><text class="muted">状态</text><text>{{status}}</text></view>
+  </view>
+
+  <view class="card" wx:if="{{order}}">
+    <view class="row"><text class="muted">款号</text><text>{{order.styleNo}}</text></view>
+    <view class="row" wx:if="{{order.styleName}}"><text class="muted">款名</text><text>{{order.styleName}}</text></view>
+    <view class="row"><text class="muted">数量</text><text>{{order.quantity}}</text></view>
+    <view class="row"><text class="muted">当前阶段</text><text>{{currentStageLabel}}</text></view>
+  </view>
+
+  <view class="card action-card" wx:if="{{state && !submissionTerminated && state.allowedAction === 'complete'}}">
+    <text class="section-title">{{state.stage === 'qc_delivery' ? '登记组检 / 出库结果' : '登记工序完成'}}</text>
+    <view class="field">
+      <text class="field-label">{{state.stage === 'qc_delivery' ? '实收件数' : '完成件数'}}</text>
+      <input class="input" type="number" value="{{pieces}}" data-field="pieces" bindinput="onFieldInput" />
+    </view>
+    <block wx:if="{{state.stage === 'qc_delivery'}}">
+      <view class="field">
+        <text class="field-label">样衣评分（0–100）</text>
+        <input class="input" type="number" value="{{workHours}}" data-field="workHours" bindinput="onFieldInput" />
+      </view>
+      <view class="field">
+        <text class="field-label">质量结果</text>
+        <picker range="{{qualityOptions}}" range-key="label" value="{{qualityIndex}}" bindchange="onQualityChange">
+          <view class="picker">{{qualityLabel}}</view>
+        </picker>
+      </view>
+      <button class="secondary-button compact-button" bindtap="chooseQcPhoto" disabled="{{!canAddQcPhoto || submitting}}">
+        {{canAddQcPhoto ? '添加照片（' + qcPhotoCountLabel + '）' : '已达10张上限'}}
+      </button>
+      <text class="muted photo-limit-copy">至少1张，最多10张；再次选择会追加保留已选照片。</text>
+      <view class="photo-row" wx:for="{{qcPhotos}}" wx:key="path">
+        <image class="photo-thumb" src="{{item.path}}" mode="aspectFill" data-index="{{index}}" bindtap="previewQcPhoto" />
+        <view class="photo-copy">
+          <text class="photo-name">{{item.displayName}}{{item.extension}}</text>
+          <text class="muted">点击缩略图预览</text>
+        </view>
+        <view class="photo-actions">
+          <text data-index="{{index}}" bindtap="renameQcPhoto">修改名称</text>
+          <text class="danger-text" data-index="{{index}}" bindtap="removeQcPhoto">移除</text>
+        </view>
+      </view>
+      <text class="upload-progress" wx:if="{{uploadProgress}}">{{uploadProgress}}</text>
+    </block>
+    <view class="field" wx:else>
+      <text class="field-label">工时（小时）</text>
+      <input class="input" type="digit" value="{{workHours}}" data-field="workHours" bindinput="onFieldInput" />
+    </view>
+    <view class="field">
+      <text class="field-label">{{state.stage === 'qc_delivery' ? '备注（返工或不合格时必填）' : '完成备注'}}</text>
+      <textarea class="textarea compact-textarea" value="{{note}}" data-field="note" bindinput="onFieldInput" />
+    </view>
+    <button class="primary-button action-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitAction">{{actionLabel}}</button>
+  </view>
+
+  <view class="card action-card" wx:if="{{state && !submissionTerminated && state.allowedAction === 'takeover'}}">
+    <text class="section-title">接替当前缝制任务</text>
+    <view class="row" wx:if="{{state.activeTask}}"><text class="muted">当前负责人</text><text>{{state.activeTask.workerName}}</text></view>
+    <view class="field">
+      <text class="field-label">接替原因</text>
+      <textarea class="textarea compact-textarea" value="{{note}}" data-field="note" bindinput="onFieldInput" />
+    </view>
+    <button class="primary-button action-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitAction">{{actionLabel}}</button>
+  </view>
+
+  <view class="card action-card" wx:if="{{state && !submissionTerminated && state.allowedAction === 'start'}}">
+    <text class="description action-description">当前账号与本工序匹配，可以开始当前工序。</text>
+    <button class="primary-button action-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitAction">{{actionLabel}}</button>
+  </view>
+
+  <view class="card action-card" wx:if="{{state && (submissionTerminated || state.blockedReason === 'wrong_stage' || state.blockedReason === 'terminated')}}">
+    <text class="section-title" wx:if="{{submissionTerminated}}">订单已终止</text>
+    <text class="description action-description">5 秒后自动返回当前角色界面，也可以立即返回。</text>
+    <button class="primary-button action-button" bindtap="returnToRoleHome">立即返回</button>
+  </view>
+</view>

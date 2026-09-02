@@ -1,0 +1,30 @@
+/* Scoped pricing-layout corrections. Keep the existing information architecture and components. */
+
+/* The page already has the pricing overview and tabs; the inner Card title row duplicates them. */
+.boss-pricing-panel > .ant-space-item > .section-card > .ant-card-head,
+.boss-pricing-panel > .section-card > .ant-card-head {
+  display: none;
+}
+
+.boss-pricing-panel > .ant-space-item > .section-card > .ant-card-body,
+.boss-pricing-panel > .section-card > .ant-card-body {
+  padding-top: 12px;
+}
+
+/* Keep the read-only other-charge aggregate fully visible inside the internal-cost area. */
+.dynamic-pricing-internal-cost-table .ant-table-summary {
+  position: relative !important;
+  inset-block-end: auto !important;
+  bottom: auto !important;
+  z-index: 2;
+  flex: 0 0 48px !important;
+  min-height: 48px;
+  overflow: visible !important;
+  background: #fafcff;
+}
+
+.dynamic-pricing-internal-cost-table .dynamic-pricing-internal-cost-summary > td {
+  height: 48px;
+  min-height: 48px;
+  visibility: visible;
+}

@@ -1,0 +1,9 @@
+<view class="client-tabs" role="tablist" wx:if="{{role === 'client_admin'}}">
+  <navigator class="client-tab {{active === 'orders' ? 'client-tab-active' : ''}}" url="/pages/client/orders" open-type="redirect">订单</navigator>
+  <navigator class="client-tab {{active === 'statistics' ? 'client-tab-active' : ''}}" url="/pages/client/statistics" open-type="redirect">业务员统计</navigator>
+  <navigator class="client-tab {{active === 'registration' ? 'client-tab-active' : ''}}" url="/pages/client/registration" open-type="redirect">业务员注册</navigator>
+</view>
+<view class="client-tabs" role="tablist" wx:else>
+  <navigator class="client-tab {{active === 'orders' ? 'client-tab-active' : ''}}" url="/pages/client/orders" open-type="redirect">我的订单</navigator>
+  <navigator class="client-tab {{active === 'intake' ? 'client-tab-active' : ''}}" url="/pages/client/intake" open-type="redirect">拍照录入</navigator>
+</view>

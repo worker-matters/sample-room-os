@@ -1,0 +1,3 @@
+<button wx:if="{{visible}}" class="test-mode-return" loading="{{busy}}" disabled="{{busy}}" bindtap="returnToTestMode">
+  {{busy ? '正在返回…' : '返回测试身份'}}
+</button>

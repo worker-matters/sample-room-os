@@ -1,0 +1,33 @@
+.client-tabs {
+  background: #ffffff;
+  border-bottom: 2rpx solid #e8ebef;
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.client-tab {
+  color: #20242a;
+  flex: 1;
+  font-size: 29rpx;
+  padding: 26rpx 8rpx 22rpx;
+  position: relative;
+  text-align: center;
+}
+
+.client-tab-active {
+  color: #176b87;
+  font-weight: 600;
+}
+
+.client-tab-active::after {
+  background: #176b87;
+  border-radius: 999rpx;
+  bottom: 0;
+  content: "";
+  height: 6rpx;
+  left: 28%;
+  position: absolute;
+  right: 28%;
+}

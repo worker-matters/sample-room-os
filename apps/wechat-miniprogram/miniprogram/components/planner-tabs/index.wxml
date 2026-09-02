@@ -1,0 +1,5 @@
+<view class="planner-tabs" role="tablist">
+  <navigator class="planner-tab {{active === 'orders' ? 'planner-tab-active' : ''}}" url="/pages/planner/orders" open-type="redirect">订单列表</navigator>
+  <navigator class="planner-tab {{active === 'production-plan' ? 'planner-tab-active' : ''}}" url="/pages/planner/production-plan" open-type="redirect">生产计划</navigator>
+  <navigator class="planner-tab {{active === 'scan-charge' ? 'planner-tab-active' : ''}}" url="/pages/planner/scan-charge" open-type="redirect">扫描费用</navigator>
+</view>

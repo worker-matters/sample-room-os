@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText": "业务员统计",
+  "usingComponents": { "client-tabs": "/components/client-tabs/index" }
+}

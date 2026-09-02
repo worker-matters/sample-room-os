@@ -1,0 +1,26 @@
+.identity-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 80rpx;
+  padding-top: 80rpx;
+}
+.identity-header { margin: 0 8rpx 42rpx; }
+.brand-title { display: block; font-size: 56rpx; font-weight: 700; line-height: 1.25; }
+.brand-subtitle { color: #74808f; display: block; font-size: 28rpx; margin-top: 8rpx; }
+.login-title { display: block; font-size: 38rpx; font-weight: 650; }
+.account-type-group { display: flex; gap: 16rpx; margin: 28rpx 0 34rpx; }
+.account-type-option {
+  align-items: center;
+  background: #f4f7f9;
+  border: 2rpx solid #dce3e8;
+  border-radius: 999rpx;
+  color: #52606d;
+  display: flex;
+  font-size: 26rpx;
+  min-height: 64rpx;
+  padding: 0 24rpx;
+}
+.account-type-active { background: #e7f4f7; border-color: #176b87; color: #176b87; font-weight: 600; }
+.account-radio { height: 0; opacity: 0; width: 0; }
+.endpoint-note { color: #74808f; display: block; font-size: 24rpx; line-height: 1.55; padding: 0 12rpx; text-align: center; }

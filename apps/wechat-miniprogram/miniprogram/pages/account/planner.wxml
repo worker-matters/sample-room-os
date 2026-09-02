@@ -1,0 +1,2 @@
+<test-mode-return />
+<view class="page"><view class="card"><text class="title">计划员手机工作台</text><text class="description">本阶段仅建立身份恢复与路由。</text></view><button class="primary-button" bindtap="openScanner">扫描订单二维码</button></view>

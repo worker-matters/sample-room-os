@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      Android cannot express dynamic RFC1918 CIDR ranges here. Endpoint validation rejects
+      every public or unrecognized HTTP host before OkHttp receives it; this platform switch
+      remains enabled only so runtime-configured factory LAN addresses can use HTTP.
+    -->
+    <base-config
+        cleartextTrafficPermitted="true"
+        tools:ignore="InsecureBaseConfiguration" />
+</network-security-config>

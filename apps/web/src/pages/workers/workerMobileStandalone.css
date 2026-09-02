@@ -1,0 +1,229 @@
+.worker-mobile-lite-page {
+  background:
+    radial-gradient(circle at 14% 8%, rgba(63, 136, 255, 0.11), transparent 32%),
+    radial-gradient(circle at 90% 92%, rgba(57, 189, 157, 0.08), transparent 30%),
+    #f4f7fb;
+}
+
+.worker-mobile-lite-header {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 8px;
+}
+
+.worker-mobile-lite-brand,
+.worker-mobile-lite-boot-brand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.worker-mobile-lite-brand img,
+.worker-mobile-lite-boot-brand img {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: block;
+}
+
+.worker-mobile-lite-brand > div,
+.worker-mobile-lite-boot-brand > div {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.worker-mobile-lite-brand strong,
+.worker-mobile-lite-boot-brand strong {
+  color: #123b63;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.worker-mobile-lite-brand span,
+.worker-mobile-lite-boot-brand span {
+  color: #7b91a8;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.worker-mobile-lite-header-button,
+.worker-mobile-lite-close-button,
+.worker-mobile-lite-sheet-actions button {
+  border: 1px solid rgba(218, 227, 239, 0.94);
+  color: #315171;
+  background: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.worker-mobile-lite-header-button,
+.worker-mobile-lite-close-button {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 13px;
+  box-shadow: 0 4px 14px rgba(33, 57, 92, 0.05);
+}
+
+.worker-mobile-lite-header-button svg,
+.worker-mobile-lite-close-button svg,
+.worker-mobile-lite-icon svg,
+.worker-mobile-lite-inline-icon svg,
+.worker-mobile-lite-svg svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+  fill: currentColor;
+}
+
+.worker-mobile-lite-header-button svg,
+.worker-mobile-lite-close-button svg {
+  width: 19px;
+  height: 19px;
+}
+
+.worker-mobile-lite-svg svg {
+  width: 26px;
+  height: 26px;
+}
+
+.worker-mobile-secondary-action-icon.worker-mobile-lite-svg svg {
+  width: 21px;
+  height: 21px;
+}
+
+.worker-mobile-lite-inline-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.worker-mobile-lite-inline-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.worker-mobile-lite-sheet-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.worker-mobile-lite-sheet-actions button {
+  min-height: 38px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 12px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.worker-mobile-lite-sheet-actions button:last-child {
+  width: 38px;
+  padding: 0;
+}
+
+.worker-mobile-lite-sheet-actions svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.worker-mobile-lite-boot {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px 20px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(63, 136, 255, 0.11), transparent 32%),
+    radial-gradient(circle at 90% 90%, rgba(57, 189, 157, 0.09), transparent 28%),
+    #f4f7fb;
+  color: #6b7a90;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.worker-mobile-lite-boot-brand {
+  margin-bottom: 10px;
+}
+
+.worker-mobile-lite-boot p {
+  margin: 0;
+  color: #7d8b9d;
+  font-size: 13px;
+}
+
+.worker-mobile-lite-boot .worker-mobile-error {
+  width: min(100%, 380px);
+  margin-top: 2px;
+  text-align: center;
+}
+
+.worker-mobile-lite-boot .worker-mobile-secondary-button {
+  width: min(100%, 260px);
+}
+
+.worker-mobile-lite-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #dbe7f6;
+  border-top-color: #2f7bdc;
+  border-radius: 50%;
+  animation: worker-mobile-lite-spin 700ms linear infinite;
+}
+
+.worker-mobile-lite-lazy-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 3550;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #6d7e92;
+  background: rgba(244, 247, 251, 0.96);
+  backdrop-filter: blur(6px);
+  font-size: 14px;
+}
+
+.worker-mobile-scanner .worker-mobile-lite-icon {
+  color: #fff;
+}
+
+@keyframes worker-mobile-lite-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 390px) {
+  .worker-mobile-lite-header {
+    padding-inline: 13px;
+  }
+
+  .worker-mobile-lite-brand img {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+  .worker-mobile-lite-brand strong {
+    font-size: 15px;
+  }
+
+  .worker-mobile-lite-brand span {
+    font-size: 10px;
+  }
+}

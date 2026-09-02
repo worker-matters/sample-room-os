@@ -1,0 +1,16 @@
+<test-mode-return />
+<client-tabs active="registration" role="client_admin" />
+<view class="client-page">
+  <view class="client-notice">业务员通过公网注册链接自行填写姓名、联系方式、账号和密码；提交后仍需老板审批。</view>
+  <view class="client-notice client-error" wx:if="{{message}}">{{message}}</view>
+  <view class="client-section">
+    <view class="registration-head"><view><text class="client-title">业务员注册码</text><text class="client-muted">{{registration.enabled ? '注册码已开启' : '注册码未开启'}}</text></view><button wx:if="{{registration.enabled}}" size="mini" class="client-danger" bindtap="closeRegistration">关闭</button><button wx:else size="mini" class="client-primary" bindtap="openRegistration">开启</button></view>
+    <view wx:if="{{registration.enabled && registrationUrl}}" class="registration-link"><text selectable>{{registrationUrl}}</text><button class="client-secondary" size="mini" bindtap="copyRegistrationUrl">复制链接</button></view>
+    <text class="client-muted" wx:if="{{registration.enabled && !registrationUrl}}">未配置公网注册地址，请在 Web 端查看并分享注册二维码。</text>
+  </view>
+  <view class="client-section">
+    <text class="client-title">注册申请</text>
+    <view class="request-row" wx:for="{{requests}}" wx:key="id"><view><text>{{item.businessUserName}}</text><text class="client-muted request-meta">{{item.contact}} · {{item.createdAt}}</text></view><text class="request-status request-status-{{item.status}}">{{item.statusLabel}}</text></view>
+    <text class="client-muted" wx:if="{{!requests.length && !loading}}">暂无业务员注册申请</text>
+  </view>
+</view>

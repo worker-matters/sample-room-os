@@ -1,0 +1,5 @@
+{
+  "navigationBarTitleText": "客户手机端",
+  "enablePullDownRefresh": true,
+  "usingComponents": { "client-tabs": "/components/client-tabs/index" }
+}

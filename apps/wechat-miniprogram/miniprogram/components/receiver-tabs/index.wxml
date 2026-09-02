@@ -1,0 +1,5 @@
+<view class="receiver-tabs" role="tablist">
+  <navigator class="receiver-tab {{active === 'intake' ? 'receiver-tab-active' : ''}}" url="/pages/receiver/intake" open-type="redirect">现场录入</navigator>
+  <navigator class="receiver-tab {{active === 'orders' ? 'receiver-tab-active' : ''}}" url="/pages/receiver/orders" open-type="redirect">订单</navigator>
+  <navigator class="receiver-tab {{active === 'scan-charge' ? 'receiver-tab-active' : ''}}" url="/pages/receiver/scan-charge" open-type="redirect">扫描费用</navigator>
+</view>

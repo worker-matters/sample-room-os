@@ -1,0 +1,10 @@
+<test-mode-return />
+<view class="page mobile-home">
+  <view class="card identity-card">
+    <view><text class="identity-name">{{displayName}}</text><text class="description">当前角色：{{roleLabel}} · 当前 API：{{apiModeLabel}}</text></view>
+    <button class="account-button" size="mini" bindtap="openAccount">账号与退出</button>
+  </view>
+  <view class="entry-card" bindtap="openOrders"><view><text class="entry-title">订单</text><text class="entry-description">查询、筛选与只读详情</text></view><text class="entry-arrow">›</text></view>
+  <view class="entry-card" bindtap="openIntake"><view><text class="entry-title">现场录入</text><text class="entry-description">拍照简录与常规录入</text></view><text class="entry-arrow">›</text></view>
+  <view class="entry-card" bindtap="openScanCharge"><view><text class="entry-title">扫描费用</text><text class="entry-description">扫描订单码登记费用</text></view><text class="entry-arrow">›</text></view>
+</view>

@@ -1,0 +1,32 @@
+<test-mode-return />
+<view class="client-page">
+  <view class="client-notice">客户订单详情仅展示当前账号有权查看的订单任务、客户可见附件、获准交付物和已确认报价。</view>
+  <view class="client-notice client-error" wx:if="{{message}}">{{message}}</view>
+  <block wx:if="{{order}}">
+    <view class="client-section">
+      <text class="client-title">{{order.styleName}}</text>
+      <text class="client-muted">{{order.orderNo}} · {{order.styleNo}}</text>
+      <view class="detail-grid"><view><text class="client-muted">业务员</text><text>{{order.salespersonName}}</text></view><view><text class="client-muted">数量</text><text>{{order.quantity}} 件</text></view><view><text class="client-muted">样品类型</text><text>{{order.sampleTypeLabel}}</text></view><view><text class="client-muted">轮次</text><text>{{order.sampleRoundLabel}}</text></view><view><text class="client-muted">交期</text><text>{{order.deliveryDate}}</text></view><view><text class="client-muted">已确认报价</text><text>{{order.quotationLabel}}</text></view></view>
+      <text class="client-muted detail-remark">备注：{{order.remark || '-'}}</text>
+    </view>
+    <view class="client-section">
+      <text class="client-title detail-title">订单任务</text>
+      <view class="task-list"><text wx:for="{{order.orderTasks}}" wx:key="item" class="task-tag {{item.completed ? 'task-tag-complete' : ''}}">{{item.completed ? '已完成' : '未完成'}} · {{item.label}}</text></view>
+      <text class="client-muted" wx:if="{{!order.orderTasks.length}}">无订单任务</text>
+    </view>
+    <view class="client-section" wx:if="{{order.returnReason}}">
+      <text class="client-title detail-title">退回说明</text><text class="return-reason">{{order.returnReason}}</text>
+      <button wx:if="{{!isAdmin && order.intakeStatus === 'needs_client_supplement'}}" class="client-primary supplement-button" bindtap="goSupplement">补充资料</button>
+    </view>
+    <view class="client-section">
+      <text class="client-title detail-title">附件（客户可见） {{order.attachments.length}}</text>
+      <view class="file-row" wx:for="{{order.attachments}}" wx:key="id" data-id="{{item.id}}" data-mime="{{item.mimeType}}" bindtap="openAttachment"><view><text>{{item.fileName}}</text><text class="client-muted file-meta">{{item.createdAt}}</text></view><text class="file-action">{{openingFileId === item.id ? '打开中' : '打开'}}</text></view>
+      <text class="client-muted" wx:if="{{!order.attachments.length}}">暂无客户可见附件</text>
+    </view>
+    <view class="client-section">
+      <text class="client-title detail-title">获准版师交付物 {{order.patternDeliverables.length}}</text>
+      <view class="file-row" wx:for="{{order.patternDeliverables}}" wx:key="id" data-id="{{item.id}}" data-mime="{{item.mimeType}}" bindtap="openDeliverable"><view><text>{{item.fileName || item.type}} · {{item.version}}</text><text class="client-muted file-meta">{{item.createdAt}}</text></view><text class="file-action">{{openingFileId === item.id ? '打开中' : '打开'}}</text></view>
+      <text class="client-muted" wx:if="{{!order.patternDeliverables.length}}">暂无获准交付物</text>
+    </view>
+  </block>
+</view>

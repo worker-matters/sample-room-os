@@ -1,0 +1,4 @@
+{
+  "navigationBarTitleText": "业务员注册",
+  "usingComponents": { "client-tabs": "/components/client-tabs/index" }
+}

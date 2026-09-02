@@ -1,0 +1,17 @@
+<test-mode-return />
+<view class="page">
+  <view class="hero">
+    <text class="hero-title">Sample Room OS</text>
+    <text class="hero-subtitle">微信小程序移动入口</text>
+  </view>
+
+  <view class="card status-list">
+    <view class="status-row"><text class="muted">当前身份</text><text>{{identityLabel}}</text></view>
+    <view class="status-row"><text class="muted">当前 API 模式</text><text>{{apiModeLabel}}</text></view>
+    <view class="status-row"><text class="muted">当前版本</text><text>{{version}}</text></view>
+  </view>
+
+  <button wx:if="{{canScanOrder}}" class="primary-button" bindtap="openScanner">扫描订单二维码</button>
+  <button class="secondary-button" bindtap="openIdentity">账号登录</button>
+
+</view>

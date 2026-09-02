@@ -1,0 +1,9 @@
+@import "./client-shared.wxss";
+
+.return-card { background: #fff7e8; border-radius: 10rpx; color: #6f4d0d; margin-bottom: 26rpx; padding: 20rpx; }
+.return-card .client-title { margin-bottom: 8rpx; }
+.upload-actions { display: grid; gap: 16rpx; grid-template-columns: 1fr 1fr; }
+.upload-actions button { font-size: 27rpx; width: 100%; }
+.file-row { align-items: center; border-bottom: 2rpx solid #eceff2; display: flex; justify-content: space-between; padding: 14rpx 0; }
+.file-row button { margin: 0; }
+.submit-button { margin-top: 30rpx; }

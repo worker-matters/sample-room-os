@@ -1,0 +1,43 @@
+<test-mode-return />
+<view class="page">
+  <view class="card filter-card">
+    <input class="input" placeholder="搜款号 / 款名 / 客户 / 业务员 / 备注" value="{{filters.keyword}}" bindinput="onKeywordInput" />
+    <view class="quick-grid">
+      <picker range="{{customerOptions}}" range-key="label" bindchange="onCustomerChange"><view class="picker">{{filters.customerName || '全部客户'}}</view></picker>
+      <picker range="{{salespersonOptions}}" range-key="label" bindchange="onSalespersonChange"><view class="picker">{{filters.salespersonName || '全部业务员'}}</view></picker>
+    </view>
+    <view class="field"><text class="field-label">接单日期</text><view class="date-row"><picker mode="date" value="{{filters.startDate}}" bindchange="onStartDateChange"><view class="picker">{{filters.startDate || '开始日期'}}</view></picker><picker mode="date" value="{{filters.endDate}}" bindchange="onEndDateChange"><view class="picker">{{filters.endDate || '结束日期'}}</view></picker></view></view>
+    <view class="date-shortcuts"><button size="mini" bindtap="useWeek">本周</button><button size="mini" bindtap="useMonth">本月</button><button size="mini" bindtap="useQuarter">近三月</button></view>
+    <button class="filter-more" bindtap="toggleAdvanced">更多筛选 {{advancedOpen ? '收起' : '展开'}}</button>
+    <view wx:if="{{advancedOpen}}" class="advanced-filter">
+      <view class="quick-grid">
+        <picker range="{{stageOptions}}" range-key="label" bindchange="onStageChange"><view class="picker">{{filters.stage ? '已选状态' : '全部状态'}}</view></picker>
+        <picker range="{{sampleRoundOptions}}" range-key="label" bindchange="onRoundChange"><view class="picker">{{filters.sampleRound ? '已选轮次' : '全部轮次'}}</view></picker>
+      </view>
+      <picker range="{{sampleTypeOptions}}" range-key="label" bindchange="onSampleTypeChange"><view class="picker field">{{filters.sampleType ? '已选样品类型' : '全部样品类型'}}</view></picker>
+      <picker range="{{materialStatusOptions}}" range-key="label" bindchange="onFabricChange"><view class="picker field">{{filters.fabricStatus ? '已选面里料状态' : '全部面里料状态'}}</view></picker>
+      <picker range="{{materialStatusOptions}}" range-key="label" bindchange="onTrimChange"><view class="picker field">{{filters.trimStatus ? '已选辅料状态' : '全部辅料状态'}}</view></picker>
+      <view class="field"><text class="field-label">交期</text><view class="date-row"><picker mode="date" value="{{filters.deliveryStartDate}}" bindchange="onDeliveryStartChange"><view class="picker">{{filters.deliveryStartDate || '开始日期'}}</view></picker><picker mode="date" value="{{filters.deliveryEndDate}}" bindchange="onDeliveryEndChange"><view class="picker">{{filters.deliveryEndDate || '结束日期'}}</view></picker></view></view>
+      <button class="secondary-button" bindtap="resetFilters">重置为本月</button>
+    </view>
+  </view>
+
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <view class="empty" wx:if="{{loading}}">正在加载订单…</view>
+  <view class="empty" wx:elif="{{!filteredOrders.length && !message}}">暂无订单</view>
+  <view class="result-summary" wx:if="{{!loading && filteredOrders.length}}"><text>共 {{filteredOrders.length}} 条订单</text><text>按接单日期降序</text></view>
+
+  <view class="card order-card" wx:for="{{filteredOrders}}" wx:key="id">
+    <image wx:if="{{item.thumbnailPath}}" class="order-thumbnail" src="{{item.thumbnailPath}}" mode="aspectFill" />
+    <view class="order-body">
+      <view class="order-title-row"><view class="style-block"><text class="muted">款式 / 款号</text><text class="subtitle">{{item.styleName}}</text><text class="description">款号：{{item.styleNo}}</text></view><text class="stage-tag">{{item.stageLabel}}</text></view>
+      <view class="key-grid"><view><text class="muted">样衣</text><text>{{item.sampleTypeLabel}} / {{item.sampleRoundLabel}}</text></view><view><text class="muted">件数</text><text>{{item.quantity}}</text></view></view>
+      <view class="customer-block"><text class="muted">客户 / 业务员</text><text>{{item.customerName}}</text><text class="description">业务员：{{item.salespersonName}}</text></view>
+      <view class="key-grid"><view><text class="muted">面里料 / 辅料</text><text>{{item.fabricStatusLabel}} / {{item.trimStatusLabel}}</text></view><view><text class="muted">录入 / 交期</text><text>{{item.entryDateLabel}} / {{item.deliveryDate}}</text></view></view>
+      <view class="request-row"><text class="muted">打样要求</text><text>{{item.requestLabels || '-'}}</text></view>
+      <view class="card-footer">
+        <button class="detail-button" size="mini" data-id="{{item.id}}" catchtap="openDetail">查看详情</button>
+      </view>
+    </view>
+  </view>
+</view>

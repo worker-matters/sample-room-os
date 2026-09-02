@@ -1,0 +1,38 @@
+name: android-phone
+
+on:
+  push:
+    branches:
+      - "codex/**"
+      - "fix/**"
+      - "feat/**"
+    paths:
+      - "apps/android/**"
+      - ".github/workflows/android-phone.yml"
+  pull_request:
+    paths:
+      - "apps/android/**"
+      - ".github/workflows/android-phone.yml"
+
+concurrency:
+  group: android-phone-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Verify phone Android app
+        working-directory: apps/android
+        run: .\gradlew.bat :app:lintDebug :app:testDebugUnitTest :app:assembleDebug --stacktrace --no-daemon

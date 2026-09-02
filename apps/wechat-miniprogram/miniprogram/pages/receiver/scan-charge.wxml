@@ -1,0 +1,45 @@
+<test-mode-return />
+<view class="page">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+
+  <view class="card" wx:if="{{!context}}">
+    <text class="title">扫描费用</text>
+    <text class="description">仅接受现有 SRS2|ORDER|... 订单码。</text>
+    <button class="primary-button" loading="{{loading}}" bindtap="scanOrderQr">扫描订单二维码</button>
+  </view>
+
+  <block wx:if="{{context}}">
+    <button class="secondary-button rescan-button" bindtap="resetScan">重新扫描</button>
+    <view class="card">
+      <text class="subtitle">{{context.order.styleNo}} · {{context.order.styleName}}</text>
+      <view class="row"><text class="muted">订单号</text><text>{{context.order.orderNo}}</text></view>
+      <view class="row"><text class="muted">客户</text><text>{{context.order.customerName || '-'}}</text></view>
+      <view class="row"><text class="muted">客户业务员</text><text>{{context.order.salespersonName || '-'}}</text></view>
+    </view>
+
+    <view class="notice error-notice" wx:if="{{context.chargeLocked}}">订单已对账，不能继续增加其他费用。</view>
+
+    <view class="card" wx:if="{{!context.chargeLocked}}">
+      <view class="charge-form-title">
+        <text class="section-title">登记新费用</text>
+        <button size="mini" class="secondary-button upload-photo-button" bindtap="chooseChargeImages">{{chargeFiles.length ? '更换照片' : '上传照片'}}</button>
+      </view>
+      <view class="field"><text class="field-label">费用名称</text><input class="input" data-field="name" value="{{charge.name}}" bindinput="onChargeInput" /></view>
+      <view class="field"><text class="field-label">金额</text><input class="input" type="digit" data-field="amount" value="{{charge.amount}}" bindinput="onChargeInput" /></view>
+      <view class="field"><text class="field-label">费用说明（可选）</text><input class="input" data-field="explanation" value="{{charge.explanation}}" bindinput="onChargeInput" /></view>
+      <view class="file-row" wx:for="{{chargeFiles}}" wx:key="path"><text>{{item.name}}</text><button size="mini" data-index="{{index}}" bindtap="removeChargeFile">移除</button></view>
+      <button class="primary-button" loading="{{submitting}}" bindtap="submitCharge">登记费用</button>
+    </view>
+
+    <view class="card">
+      <text class="section-title">有效费用</text>
+      <view class="charge-row" wx:for="{{context.charges}}" wx:key="id">
+        <view class="charge-title"><text>{{item.name}}</text><text>¥{{item.amount}}</text></view>
+        <text class="description">{{item.creatorRoleLabel}} · {{item.creatorName || '-'}} · {{item.createdDate}}</text>
+        <view class="attachment-name" wx:for="{{item.attachments}}" wx:for-item="attachment" wx:key="id">附件：{{attachment.fileName}}</view>
+        <button wx:if="{{item.canVoid}}" class="danger-button" size="mini" data-order-id="{{item.orderId}}" data-charge-id="{{item.id}}" bindtap="voidCharge">删除</button>
+      </view>
+      <view class="empty" wx:if="{{!context.charges.length}}">暂无有效费用</view>
+    </view>
+  </block>
+</view>

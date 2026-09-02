@@ -1,0 +1,72 @@
+<test-mode-return />
+<view class="page">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <view class="card detail-head" wx:if="{{order}}">
+    <image wx:if="{{order.thumbnailPath}}" class="hero-image" src="{{order.thumbnailPath}}" mode="aspectFill" />
+    <view wx:else class="hero-image hero-placeholder">单</view>
+    <view class="detail-head-copy">
+      <text class="title">{{order.styleNo}}</text>
+      <text class="description">{{order.styleName}}</text>
+    </view>
+    <text class="stage-tag">{{order.stageLabel}}</text>
+  </view>
+
+  <view class="detail-tabs" wx:if="{{order}}">
+    <view class="{{activeTab === 'overview' ? 'active' : ''}}" data-tab="overview" bindtap="changeDetailTab">概览</view>
+    <view class="{{activeTab === 'attachments' ? 'active' : ''}}" data-tab="attachments" bindtap="changeDetailTab">资料与附件</view>
+    <view class="{{activeTab === 'charges' ? 'active' : ''}}" data-tab="charges" bindtap="changeDetailTab">其他费用</view>
+    <view class="{{activeTab === 'records' ? 'active' : ''}}" data-tab="records" bindtap="changeDetailTab">流转记录</view>
+  </view>
+
+  <view class="card" wx:if="{{order && activeTab === 'overview'}}">
+    <view class="row"><text class="muted">订单号</text><text>{{order.orderNo}}</text></view>
+    <view class="row"><text class="muted">客户 / 业务员</text><text>{{order.customerName}} / {{order.salespersonName}}</text></view>
+    <view class="row"><text class="muted">数量</text><text>{{order.quantity}}</text></view>
+    <view class="row"><text class="muted">接单日期</text><text>{{order.entryDateLabel}}</text></view>
+    <view class="row"><text class="muted">样品类型 / 轮次</text><text>{{order.sampleTypeLabel}} / {{order.sampleRoundLabel}}</text></view>
+    <view class="row"><text class="muted">面里料 / 辅料</text><text>{{order.fabricStatusLabel}} / {{order.trimStatusLabel}}</text></view>
+    <view class="row"><text class="muted">打样要求</text><text>{{order.requestLabels || '-'}}</text></view>
+    <view class="row"><text class="muted">备注</text><text>{{order.remark || '-'}}</text></view>
+  </view>
+
+  <block wx:if="{{order && activeTab === 'attachments'}}">
+    <view class="card">
+      <text class="section-title">资料与附件 {{attachments.length}}</text>
+      <view class="attachment-row" wx:for="{{attachments}}" wx:key="id">
+        <view class="attachment-copy"><text>{{item.fileName}}</text><text class="muted">{{item.uploadedByName || item.uploadedByRole || '系统'}} · {{item.createdAt}}</text></view>
+        <view class="attachment-actions">
+          <text data-id="{{item.id}}" data-mime="{{item.mimeType}}" bindtap="downloadAttachment">下载</text>
+          <text wx:if="{{item.canRename}}" data-id="{{item.id}}" data-name="{{item.fileName}}" bindtap="renameAttachment">修改名称</text>
+          <text wx:if="{{item.canDelete}}" class="danger-text" data-id="{{item.id}}" bindtap="deleteAttachment">删除</text>
+        </view>
+      </view>
+      <view class="empty compact-empty" wx:if="{{!attachments.length}}">暂无附件</view>
+    </view>
+
+  </block>
+
+  <view class="card" wx:if="{{order && activeTab === 'charges'}}">
+    <view class="section-heading"><text class="section-title">其他费用</text><text class="section-summary">¥{{chargeTotal}} · 共 {{charges.length}} 笔</text></view>
+    <view class="charge-row" wx:for="{{charges}}" wx:key="id">
+      <view class="charge-main">
+        <view class="charge-title"><text>{{item.name}}</text><text>¥{{item.amount}}</text></view>
+        <text class="muted">{{item.creatorRoleLabel}} · {{item.creatorName || '-'}} · {{item.createdDate}}</text>
+      </view>
+      <view class="charge-actions" wx:if="{{item.canRename || item.canVoid}}">
+        <text wx:if="{{item.canRename}}" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="renameCharge">修改名称</text>
+        <text wx:if="{{item.canVoid}}" class="danger-text" data-id="{{item.id}}" bindtap="deleteCharge">删除</text>
+      </view>
+    </view>
+    <view class="empty compact-empty" wx:if="{{!charges.length}}">暂无其他费用</view>
+  </view>
+
+  <view class="card" wx:if="{{order && activeTab === 'records'}}">
+    <text class="section-title">流转记录 {{order.scanRecords.length}}</text>
+    <view class="scan-row" wx:for="{{order.scanRecords}}" wx:key="id">
+      <view><text class="stage-tag">{{item.stageLabel}}</text><text>{{item.actionLabel}} · {{item.workerName}}</text></view>
+      <text class="muted">{{item.eventTime}}</text>
+      <text class="description" wx:if="{{item.pieces !== undefined || item.workHours !== undefined || item.qualityResult}}">{{item.pieces !== undefined ? item.pieces + ' 件' : ''}} {{item.workHours !== undefined ? item.workHours + ' 小时' : ''}} {{item.qualityResult || ''}}</text>
+    </view>
+    <view class="empty compact-empty" wx:if="{{!order.scanRecords.length}}">暂无流转记录</view>
+  </view>
+</view>

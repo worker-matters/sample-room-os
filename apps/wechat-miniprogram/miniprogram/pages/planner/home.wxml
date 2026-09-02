@@ -1,0 +1,11 @@
+<test-mode-return />
+<view class="page mobile-home">
+  <view class="card identity-card">
+    <view><text class="identity-name">{{displayName}}</text><text class="description">当前角色：{{roleLabel}} · 当前 API：{{apiModeLabel}}</text></view>
+    <button class="account-button" size="mini" bindtap="openAccount">账号与退出</button>
+  </view>
+  <view class="entry-card" bindtap="openOrders"><view><text class="entry-title">订单</text><text class="entry-description">查询、筛选与只读详情</text></view><text class="entry-arrow">›</text></view>
+  <view class="entry-card" bindtap="openProductionPlan"><view><text class="entry-title">生产计划</text><text class="entry-description">查看待缝制和缝制中订单</text></view><text class="entry-arrow">›</text></view>
+  <view class="entry-card" bindtap="openScanCharge"><view><text class="entry-title">扫描费用</text><text class="entry-description">扫描订单码登记费用</text></view><text class="entry-arrow">›</text></view>
+  <view class="notice">计划员手机端不分配缝制员工，不修改订单、生产路线或材料状态。</view>
+</view>

@@ -1,0 +1,30 @@
+<test-mode-return />
+<client-tabs active="orders" role="{{role}}" />
+<view class="client-page">
+  <view class="client-notice">{{isAdmin ? '可查看和筛选同客户订单，不能创建打样需求。' : '仅查看本人订单；可拍照录入或补充被退回资料。'}}</view>
+  <input class="client-search" placeholder="搜索订单号 / 款号 / 款名" value="{{filters.keyword}}" bindinput="onKeywordInput" />
+  <view class="client-filter-row">
+    <picker wx:if="{{isAdmin}}" range="{{salespersonOptions}}" range-key="label" bindchange="onSalespersonChange"><view class="client-filter">{{salespersonFilterLabel}}</view></picker>
+    <picker range="{{taskOptions}}" range-key="label" bindchange="onTaskStateChange"><view class="client-filter">{{taskFilterLabel}}</view></picker>
+  </view>
+  <view class="client-notice client-error" wx:if="{{message}}">{{message}}</view>
+  <view class="client-empty" wx:if="{{loading}}">正在加载订单…</view>
+  <view class="client-empty" wx:elif="{{!filteredOrders.length && !message}}">暂无符合条件的订单</view>
+
+  <view class="order-row" wx:for="{{filteredOrders}}" wx:key="id" data-id="{{item.id}}" bindtap="openDetail">
+    <view class="order-main">
+      <image wx:if="{{item.thumbnailPath}}" class="order-thumb" src="{{item.thumbnailPath}}" mode="aspectFill" />
+      <view class="order-copy">
+        <view class="order-line"><text class="order-label">订单号</text><text>{{item.orderNo}}</text></view>
+        <view class="order-line"><text class="order-label">款号</text><text>{{item.styleNo}}</text></view>
+        <view class="order-line"><text class="order-label">款名</text><text>{{item.styleName}}</text></view>
+      </view>
+    </view>
+    <view class="order-meta">
+      <text wx:if="{{isAdmin}}">业务员　{{item.salespersonName}}</text><text>数量　{{item.quantity}} 件</text><text>交期　{{item.deliveryDate}}</text>
+    </view>
+    <view class="order-meta" wx:if="{{!isAdmin}}"><text>附件（客户可见） {{item.attachments.length}} 项</text><text>已确认报价　{{item.quotationLabel}}</text></view>
+    <text class="task-heading">订单任务</text>
+    <view class="task-list"><text wx:for="{{item.orderTasks}}" wx:key="item" class="task-tag {{item.completed ? 'task-tag-complete' : ''}}">{{item.completed ? '已完成' : '未完成'}} · {{item.label}}</text><text class="client-muted" wx:if="{{!item.orderTasks.length}}">无订单任务</text></view>
+  </view>
+</view>

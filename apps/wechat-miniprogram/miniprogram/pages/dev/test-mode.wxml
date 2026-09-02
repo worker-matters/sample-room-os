@@ -1,0 +1,18 @@
+<view class="page">
+  <view class="hero">
+    <text class="title">开发测试模式</text>
+    <text class="description">选择固定测试身份后，服务端会建立真实 AccountSession。这里不能自定义角色或账号 ID。</text>
+  </view>
+
+  <view class="notice">当前模式：{{modeLabel}}。release 安全预览不读取真实数据，也不能执行正式写操作。</view>
+
+  <view class="card">
+    <text class="section-title">选择测试身份</text>
+    <picker mode="selector" range="{{personaLabels}}" value="{{personaIndex}}" bindchange="onPersonaChange">
+      <view class="picker">{{loadError || personaLabels[personaIndex] || '正在加载'}}</view>
+    </picker>
+    <button class="primary-button" loading="{{busy}}" disabled="{{busy || !personas.length}}" bindtap="openSelectedPersona">使用该身份进入应用</button>
+  </view>
+
+  <button class="danger-button" loading="{{closing}}" disabled="{{busy || closing}}" bindtap="closeTestMode">关闭测试模式</button>
+</view>

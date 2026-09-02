@@ -1,0 +1,11 @@
+.rescan-button { margin: 0 0 24rpx; }
+.file-row, .attachment-row { align-items: center; border-bottom: 2rpx solid #eef1f3; display: flex; gap: 16rpx; justify-content: space-between; padding: 18rpx 0; }
+.file-row text, .attachment-row text { flex: 1; font-size: 25rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-row button, .attachment-row button { margin: 0; }
+.charge-row { border-top: 2rpx solid #eef1f3; padding: 24rpx 0; }
+.charge-row:first-of-type { border-top: 0; }
+.charge-title { display: flex; font-size: 30rpx; font-weight: 650; justify-content: space-between; }
+.danger-button { margin-left: 0; }
+.charge-form-title { align-items: center; display: flex; justify-content: space-between; margin-bottom: 8rpx; }
+.charge-form-title .section-title { margin-bottom: 0; }
+.upload-photo-button { margin: 0; width: auto; }

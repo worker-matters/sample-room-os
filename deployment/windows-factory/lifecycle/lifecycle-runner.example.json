@@ -1,0 +1,19 @@
+{
+  "executorId": "factory-runner",
+  "runnerApiBaseUrl": "http://127.0.0.1:3002",
+  "machineCredential": "replace-with-an-install-time-random-machine-credential",
+  "stateDirectory": "C:\\ProgramData\\SampleRoomLifecycle",
+  "backupRoot": "C:\\FactoryBackups",
+  "updateRoot": "C:\\FactoryBackups\\SystemUpdates",
+  "factoryDataRoot": "C:\\SampleRoomData",
+  "applicationDataRoot": "C:\\SampleRoomData\\application",
+  "storageRoot": "D:\\SampleRoomAttachments",
+  "composeFile": "C:\\FactoryApp\\deployment\\windows-factory\\compose.yml",
+  "factoryEnvFile": "C:\\FactoryApp\\deployment\\windows-factory\\.env.factory.local",
+  "postgresUser": "sample_room",
+  "postgresDatabase": "sample_room_v2",
+  "appVersion": "0.1.0",
+  "runnerVersion": "1.0.0",
+  "pollIntervalSeconds": 5,
+  "logRetentionDays": 30
+}

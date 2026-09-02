@@ -1,0 +1,87 @@
+<test-mode-return />
+<view class="page pricing-page" wx:if="{{detail}}">
+  <view class="notice error-notice" wx:if="{{message}}">{{message}}</view>
+  <view class="notice status-notice" wx:if="{{locked}}">报价已确认并锁定。点击“更新客户报价”后可继续修改，历史对账单不会改变。</view>
+  <view class="notice status-notice" wx:elif="{{hasConfirmedSnapshot}}">正在更新报价；客户仍看到上次确认版本，重新确认后才会更新。</view>
+  <view class="notice status-notice" wx:else>当前为草稿，客户不可见。</view>
+
+  <view class="card order-card">
+    <view class="card-head"><view><text class="title">{{detail.order.styleNo}}</text><text class="description">{{detail.order.styleName}}</text></view><text class="status-tag">{{locked ? '已确认' : hasConfirmedSnapshot ? '更新中' : '草稿'}}</text></view>
+    <view class="row"><text class="muted">客户 / 客户业务员</text><text>{{detail.order.customerName}} / {{detail.order.salespersonName}}</text></view>
+    <view class="row"><text class="muted">数量 / 交期</text><text>{{detail.order.quantity}} / {{detail.order.deliveryDate}}</text></view>
+  </view>
+
+  <view class="card task-card">
+    <text class="section-title">本单任务</text>
+    <view class="task-line"><text class="task-tag" wx:for="{{detail.orderTasks}}" wx:key="key">{{item.label}}</text></view>
+    <text class="description">任务用于推荐费用项目和标识来源，不限制真实费用录入。</text>
+  </view>
+
+  <view class="summary-grid card">
+    <view><text class="muted">客户报价小计</text><text class="summary-value">¥{{detail.summary.customerQuoteSubtotal || 0}}</text></view>
+    <view><text class="muted">其他费用</text><text class="summary-value">¥{{detail.summary.confirmedOtherChargeTotal || 0}}</text></view>
+    <view><text class="muted">应收合计</text><text class="summary-value primary">¥{{detail.summary.receivableTotal}}</text></view>
+    <view><text class="muted">内部成本</text><text class="summary-value">¥{{detail.summary.internalTotalCost}}</text></view>
+  </view>
+
+  <view class="card">
+    <view class="section-head"><view><text class="section-title">客户报价</text><text class="description">收费名称与 Web 一致，金额可直接编辑。</text></view><button size="mini" class="add-button" bindtap="addCustomer" disabled="{{locked}}">新增收费项</button></view>
+    <view class="edit-item" wx:for="{{customerDrafts}}" wx:key="id">
+      <view class="edit-head">
+        <picker class="compact-picker" disabled="{{locked}}" range="{{customerNameOptions}}" range-key="label" value="{{item.nameIndex}}" data-id="{{item.id}}" data-field="name" bindchange="pickCustomer"><view>{{customerNameOptions[item.nameIndex].label}}⌄</view></picker>
+        <button size="mini" class="delete-link" disabled="{{locked}}" data-id="{{item.id}}" bindtap="removeCustomer">删除</button>
+      </view>
+      <view class="two-columns">
+        <picker class="picker" disabled="{{locked}}" range="{{pricingMethodOptions}}" range-key="label" value="{{item.methodIndex}}" data-id="{{item.id}}" data-field="method" bindchange="pickCustomer"><view>{{pricingMethodOptions[item.methodIndex].label}}</view></picker>
+        <picker class="picker" disabled="{{locked}}" range="{{sourceOptions}}" range-key="label" value="{{item.sourceIndex}}" data-id="{{item.id}}" data-field="source" bindchange="pickCustomer"><view>{{sourceOptions[item.sourceIndex].label}}</view></picker>
+      </view>
+      <view class="two-columns" wx:if="{{item.pricingMethod === 'unit_quantity'}}">
+        <view class="field compact"><text class="field-label">单价</text><input class="input" disabled="{{locked}}" type="digit" value="{{item.unitPrice}}" data-id="{{item.id}}" data-field="unitPrice" bindinput="updateCustomer" /></view>
+        <view class="field compact"><text class="field-label">数量</text><input class="input" disabled="{{locked}}" type="digit" value="{{item.quantity}}" data-id="{{item.id}}" data-field="quantity" bindinput="updateCustomer" /></view>
+      </view>
+      <view class="field compact" wx:else><text class="field-label">金额</text><input class="input" disabled="{{locked}}" type="digit" value="{{item.amount}}" data-id="{{item.id}}" data-field="amount" bindinput="updateCustomer" /></view>
+      <view class="row amount-row" wx:if="{{item.pricingMethod === 'unit_quantity'}}"><text class="muted">金额</text><text>¥{{item.amount}}</text></view>
+      <input class="input note-input" disabled="{{locked}}" placeholder="说明（可选）" value="{{item.note}}" data-id="{{item.id}}" data-field="note" bindinput="updateCustomer" />
+    </view>
+    <view class="empty compact-empty" wx:if="{{!customerDrafts.length}}">暂无客户报价项目，可新增后直接编辑</view>
+  </view>
+
+  <view class="card">
+    <view class="section-head"><view><text class="section-title">内部成本（客户不可见）</text><text class="description">系统推荐与人工新增处于同一层级。</text></view><button size="mini" class="add-button" bindtap="addInternal" disabled="{{locked}}">新增成本项</button></view>
+    <view class="edit-item" wx:for="{{internalDrafts}}" wx:key="id">
+      <view class="edit-head">
+        <picker class="compact-picker" disabled="{{locked}}" range="{{categoryOptions}}" range-key="label" value="{{item.categoryIndex}}" data-id="{{item.id}}" data-field="category" bindchange="pickInternal"><view>{{categoryOptions[item.categoryIndex].label}}⌄</view></picker>
+        <button size="mini" class="delete-link" disabled="{{locked}}" data-id="{{item.id}}" bindtap="removeInternal">删除</button>
+      </view>
+      <view class="field compact"><text class="field-label">金额</text><input class="input" disabled="{{locked}}" type="digit" value="{{item.amount}}" data-id="{{item.id}}" data-field="amount" bindinput="updateInternal" /></view>
+    </view>
+    <view class="money-row aggregate-row"><view><text>其他费用</text><text class="description">已确认记录自动汇总</text></view><text>¥{{detail.summary.confirmedOtherChargeTotal || 0}}</text></view>
+  </view>
+
+  <view class="card" id="boss-other-charges">
+    <text class="section-title">其他费用</text>
+    <text class="description">实报实销；仅已确认记录进入应收合计，内部成本区域保留只读汇总供查看。</text>
+    <view class="inline-form">
+      <input class="input" disabled="{{locked}}" placeholder="费用项目" value="{{otherName}}" data-field="otherName" bindinput="otherField" />
+      <input class="input amount-input" disabled="{{locked}}" type="digit" placeholder="金额" value="{{otherAmount}}" data-field="otherAmount" bindinput="otherField" />
+    </view>
+    <button class="secondary-button" disabled="{{locked || loading}}" bindtap="addOtherCharge">登记其他费用</button>
+    <view class="other-item" wx:for="{{otherCharges}}" wx:key="id">
+      <view class="edit-head"><text class="item-name">{{item.name}}</text><text class="charge-status {{item.status}}">{{item.statusLabel}}</text></view>
+      <view class="row"><text class="muted">{{item.creatorLabel}} · {{item.createdDate}}</text><text class="money-small">¥{{item.amount}}</text></view>
+      <view class="other-actions" wx:if="{{!locked}}">
+        <button wx:if="{{item.status === 'pending'}}" size="mini" class="link-button" data-id="{{item.id}}" bindtap="confirmOtherCharge">确认</button>
+        <button size="mini" class="delete-link" data-id="{{item.id}}" bindtap="deleteOtherCharge">删除</button>
+      </view>
+    </view>
+    <view class="empty compact-empty" wx:if="{{!otherCharges.length}}">暂无其他费用记录</view>
+  </view>
+
+  <view class="action-bar">
+    <button wx:if="{{locked}}" class="primary-button full-action" loading="{{loading}}" bindtap="beginUpdate">更新客户报价</button>
+    <block wx:else>
+      <button class="secondary-button action-button" loading="{{loading}}" bindtap="saveDraft">保存草稿</button>
+      <button class="primary-button action-button" loading="{{loading}}" bindtap="confirmPricing">{{hasConfirmedSnapshot ? '确认更新报价' : '确认客户报价'}}</button>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,18 @@
+@import "../../app.wxss";
+@import "./client-shared.wxss";
+
+.order-row {
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 28rpx rgba(23, 60, 90, 0.08);
+  margin-top: 24rpx;
+  padding: 28rpx;
+}
+.order-main { align-items: center; display: flex; gap: 18rpx; }
+.order-thumb { background: #eef1f4; border-radius: 8rpx; flex: 0 0 106rpx; height: 130rpx; width: 106rpx; }
+.order-copy { flex: 1; min-width: 0; }
+.order-line { display: flex; font-size: 25rpx; gap: 14rpx; line-height: 1.65; }
+.order-label { color: #6d747d; flex: 0 0 72rpx; }
+.order-chevron { color: #8b9299; font-size: 44rpx; }
+.order-meta { color: #525961; display: flex; flex-wrap: wrap; font-size: 23rpx; gap: 10rpx 28rpx; margin-top: 14rpx; }
+.task-heading { display: block; font-size: 25rpx; font-weight: 600; margin-top: 16rpx; }

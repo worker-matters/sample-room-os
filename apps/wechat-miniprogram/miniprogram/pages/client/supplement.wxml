@@ -1,0 +1,18 @@
+<test-mode-return />
+<view class="client-page supplement-page">
+  <view class="client-notice">沿用现有 H5 的客户补充资料流程；提交后由服务端按现有规则处理。</view>
+  <view class="client-notice client-error" wx:if="{{message}}">{{message}}</view>
+  <block wx:if="{{form}}">
+    <view class="return-card" wx:if="{{order.returnReason}}"><text class="client-title">退回原因</text><text>{{order.returnReason}}</text></view>
+    <view class="client-field"><text class="client-field-label">款号</text><input class="client-input" data-field="styleNo" value="{{form.styleNo}}" bindinput="onInput" /></view>
+    <view class="client-field"><text class="client-field-label">款名</text><input class="client-input" data-field="styleName" value="{{form.styleName}}" bindinput="onInput" /></view>
+    <view class="client-field"><text class="client-field-label">数量</text><input class="client-input" type="number" data-field="quantity" value="{{form.quantity}}" bindinput="onInput" /></view>
+    <view class="client-field"><text class="client-field-label">样品类型</text><picker range="{{sampleTypeLabels}}" bindchange="onSampleTypeChange"><view class="client-picker">{{sampleTypeLabel}}</view></picker></view>
+    <view class="client-field"><text class="client-field-label">样品轮次</text><picker range="{{sampleRoundLabels}}" bindchange="onSampleRoundChange"><view class="client-picker">{{sampleRoundLabel}}</view></picker></view>
+    <view class="client-field"><text class="client-field-label">期望交期</text><picker mode="date" value="{{form.deliveryDate}}" bindchange="onDeliveryDateChange"><view class="client-picker">{{form.deliveryDate}}</view></picker></view>
+    <view class="client-field"><text class="client-field-label">备注</text><textarea class="client-textarea" data-field="remark" value="{{form.remark}}" bindinput="onInput" /></view>
+    <view class="client-field"><text class="client-field-label">补充图片（可选）</text><view class="upload-actions"><button class="client-secondary" bindtap="chooseCamera">拍照</button><button class="client-secondary" bindtap="chooseAlbum">从相册选择</button></view></view>
+    <view class="file-row" wx:for="{{files}}" wx:key="path"><text>{{item.name}}</text><button size="mini" data-index="{{index}}" bindtap="removeFile">删除</button></view>
+    <button class="client-primary submit-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">提交补充资料</button>
+  </block>
+</view>

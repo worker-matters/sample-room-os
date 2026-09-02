@@ -1,0 +1,12 @@
+@import "../../app.wxss";
+@import "./client-shared.wxss";
+.detail-grid { display: grid; gap: 20rpx; grid-template-columns: 1fr 1fr; margin-top: 24rpx; }
+.detail-grid view { display: flex; flex-direction: column; gap: 4rpx; }
+.detail-remark, .file-meta { display: block; margin-top: 16rpx; }
+.detail-title { font-size: 29rpx; }
+.return-reason { color: #b34222; display: block; line-height: 1.6; margin-top: 12rpx; }
+.supplement-button { margin-top: 22rpx; }
+.file-row { align-items: center; border-top: 2rpx solid #edf0f2; display: flex; justify-content: space-between; padding: 20rpx 0; }
+.file-row view { flex: 1; min-width: 0; }
+.file-meta { font-size: 22rpx; margin-top: 5rpx; }
+.file-action { color: #176b87; flex: 0 0 auto; font-size: 25rpx; margin-left: 20rpx; }

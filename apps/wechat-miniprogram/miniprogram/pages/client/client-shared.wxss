@@ -1,0 +1,124 @@
+.client-page {
+  background: #f3f6f8;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 22rpx 24rpx 44rpx;
+}
+
+.client-notice {
+  background: #edf7fb;
+  border-left: 8rpx solid #176b87;
+  border-radius: 10rpx;
+  color: #384a5f;
+  font-size: 25rpx;
+  line-height: 1.55;
+  margin-bottom: 20rpx;
+  padding: 18rpx 22rpx;
+}
+
+.client-error {
+  background: #fff1f0;
+  color: #a3322c;
+}
+
+.client-search {
+  background: #ffffff;
+  border: 2rpx solid #d9dde3;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+  height: 80rpx;
+  margin-bottom: 18rpx;
+  padding: 0 22rpx;
+  width: 100%;
+}
+
+.client-filter-row {
+  border-bottom: 2rpx solid #eceff2;
+  border-top: 2rpx solid #eceff2;
+  display: flex;
+  gap: 0;
+  margin: 0 -24rpx 0;
+  padding: 0 24rpx;
+}
+
+.client-filter {
+  border-right: 2rpx solid #eceff2;
+  box-sizing: border-box;
+  color: #30343a;
+  font-size: 26rpx;
+  min-width: 0;
+  padding: 22rpx 24rpx 22rpx 6rpx;
+}
+
+.client-filter:last-child { border-right: 0; }
+
+.client-empty {
+  color: #7b8790;
+  padding: 72rpx 20rpx;
+  text-align: center;
+}
+
+.client-section {
+  background: #ffffff;
+  border: 0;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 28rpx rgba(23, 60, 90, 0.08);
+  margin-bottom: 24rpx;
+  padding: 28rpx;
+}
+
+.client-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.client-muted {
+  color: #717983;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+
+.client-primary {
+  background: #176b87;
+  border-radius: 14rpx;
+  color: #ffffff;
+}
+
+.client-secondary {
+  background: #ffffff;
+  border: 2rpx solid #176b87;
+  border-radius: 14rpx;
+  color: #176b87;
+}
+
+.client-danger {
+  background: #ffffff;
+  border: 2rpx solid #d6453d;
+  border-radius: 10rpx;
+  color: #c3352e;
+}
+
+.client-field { margin-bottom: 22rpx; }
+.client-field-label { display: block; font-size: 26rpx; margin-bottom: 10rpx; }
+.client-input, .client-picker, .client-textarea {
+  background: #f7f8fa;
+  border: 2rpx solid #dce1e6;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+  min-height: 80rpx;
+  padding: 18rpx 20rpx;
+  width: 100%;
+}
+.client-textarea { min-height: 150rpx; }
+
+.task-list { display: flex; flex-wrap: wrap; gap: 10rpx; margin-top: 14rpx; }
+.task-tag {
+  border: 2rpx solid #ffb69c;
+  border-radius: 8rpx;
+  color: #dc3f19;
+  font-size: 23rpx;
+  padding: 7rpx 12rpx;
+}
+.task-tag-complete { border-color: #9eddb1; color: #169b45; }

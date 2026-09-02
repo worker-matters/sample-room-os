@@ -1,0 +1,37 @@
+{
+  "name": "@sample-room/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "node scripts/build-formal-web.mjs",
+    "build:configured": "node scripts/build-web.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "preview": "vite preview",
+    "test": "node --test scripts/build-web.test.mjs && vitest run src/components/ClientAttachmentPicker.test.ts src/components/accounts/customerAccountExpansion.test.ts src/components/attachmentFileName.test.ts src/components/attachments/attachmentPresentation.test.ts src/components/attachments/attachmentPreview.test.ts src/components/orders/orderDisplay.test.ts src/components/orders/orderFilters.test.ts src/components/orders/bossStageFilter.test.ts src/components/orders/bossQuickFilter.test.ts src/components/orders/bossPricingThumbnailPreview.test.ts src/components/orders/orderListUsability.test.ts src/components/receiver/receiverIntakeUi.test.ts src/components/sample-types/sampleTypeUi.test.ts src/components/export/orderExportRules.test.ts src/components/system-owner/miniappReleasePreviewUi.test.ts src/utils/networkConfigQr.test.ts src/printing/receiverLabel.test.ts src/printing/orderQrPdf.test.ts src/api/requestMultipart.test.ts src/api/sampleRoomApi.test.ts src/app/appLayout.test.ts src/app/bossOrderWorkspace.test.ts src/app/brandRefresh.test.ts src/pages/client/clientPages.test.ts src/pages/planner/plannerWorkbench.test.ts src/pages/system-owner/RecoveryPointPanel.test.ts src/pages/tablet/tabletWorkbenches.test.ts src/pages/login/qcTabletLoginBoundary.test.ts src/pages/qc/qcTablet.test.ts src/pages/qc/tabletNativeBridge.test.ts src/pages/workers/workerRegistrationStandalone.test.ts src/pages/workers/workerMobilePerformance.test.ts src/pages/workers/workerMobileStandalone.test.ts",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.6.1",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@sample-room/shared": "0.1.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "@zxing/browser": "^0.1.5",
+    "antd": "^5.26.3",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "7.18.2",
+    "vite": "^7.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.2",
+    "@types/node": "^24.0.10",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.8.3"
+  }
+}

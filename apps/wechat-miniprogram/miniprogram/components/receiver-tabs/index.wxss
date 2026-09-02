@@ -1,0 +1,31 @@
+.receiver-tabs {
+  background: #ffffff;
+  border-bottom: 2rpx solid #edf1f5;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 96rpx;
+}
+
+.receiver-tab {
+  align-items: center;
+  color: #30343b;
+  display: flex;
+  font-size: 29rpx;
+  justify-content: center;
+  position: relative;
+}
+
+.receiver-tab-active {
+  color: #176b87;
+  font-weight: 600;
+}
+
+.receiver-tab-active::after {
+  background: #176b87;
+  bottom: 0;
+  content: "";
+  height: 5rpx;
+  left: 24%;
+  position: absolute;
+  right: 24%;
+}

@@ -1,0 +1,288 @@
+.receiver-page {
+  background: #f3f6f8;
+  box-sizing: border-box;
+  min-height: calc(100vh - 96rpx);
+  padding: 28rpx;
+}
+
+.mode-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 4rpx 0 24rpx;
+}
+
+.mode-title {
+  color: #1f2329;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.mode-switch {
+  border: 2rpx solid #d9d9d9;
+  border-radius: 10rpx;
+  display: flex;
+  overflow: hidden;
+}
+
+.mode-button {
+  background: #ffffff;
+  border: 0;
+  border-radius: 0;
+  color: #30343b;
+  font-size: 27rpx;
+  line-height: 64rpx;
+  margin: 0;
+  min-width: 140rpx;
+  padding: 0 22rpx;
+}
+
+.mode-button::after,
+.outline-button::after,
+.file-delete::after,
+.optional-toggle::after,
+.submit-button::after {
+  border: 0;
+}
+
+.mode-button-active {
+  background: #e7f4f7;
+  color: #176b87;
+}
+
+.compact-notice,
+.message {
+  border-radius: 8rpx;
+  font-size: 25rpx;
+  line-height: 1.55;
+  margin-bottom: 22rpx;
+  padding: 18rpx 22rpx;
+}
+
+.compact-notice {
+  background: #edf7fb;
+  color: #375466;
+}
+
+.error-message {
+  background: #fff1f0;
+  color: #a8071a;
+}
+
+.success-message {
+  background: #f6ffed;
+  color: #237804;
+}
+
+.form-surface,
+.optional-panel,
+.full-fields {
+  background: #ffffff;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 28rpx rgba(23, 60, 90, 0.08);
+  margin-bottom: 24rpx;
+}
+
+.selector-row {
+  align-items: center;
+  border-bottom: 2rpx solid #edf0f3;
+  display: flex;
+  font-size: 29rpx;
+  justify-content: space-between;
+  min-height: 96rpx;
+  padding: 0 24rpx;
+}
+
+.selector-value {
+  color: #30343b;
+  max-width: 68%;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-section {
+  padding: 26rpx 24rpx;
+}
+
+.upload-title {
+  display: block;
+  font-size: 29rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+
+.upload-actions {
+  display: grid;
+  gap: 16rpx;
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.outline-button {
+  background: #ffffff;
+  border: 2rpx solid #176b87;
+  border-radius: 12rpx;
+  color: #176b87;
+  font-size: 26rpx;
+  line-height: 72rpx;
+  margin: 0;
+  padding: 0 12rpx;
+}
+
+.file-row {
+  align-items: center;
+  border-top: 2rpx solid #edf0f3;
+  display: flex;
+  gap: 18rpx;
+  min-height: 94rpx;
+  padding: 18rpx 0 0;
+  margin-top: 18rpx;
+}
+
+.file-thumb {
+  background: #f3f4f6;
+  border-radius: 6rpx;
+  height: 72rpx;
+  width: 72rpx;
+}
+
+.file-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 26rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-size,
+.empty-files,
+.optional-summary,
+.submit-note {
+  color: #8c8c8c;
+  font-size: 23rpx;
+}
+
+.file-delete {
+  background: transparent;
+  color: #176b87;
+  font-size: 24rpx;
+  margin: 0;
+  padding: 0 8rpx;
+}
+
+.empty-files {
+  display: block;
+  padding-top: 20rpx;
+}
+
+.optional-toggle {
+  align-items: center;
+  background: #ffffff;
+  border: 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  min-height: 100rpx;
+  padding: 18rpx 24rpx;
+  text-align: left;
+  width: 100%;
+}
+
+.optional-toggle view,
+.optional-summary {
+  display: block;
+}
+
+.optional-toggle > view > text:first-child {
+  font-size: 28rpx;
+}
+
+.optional-summary {
+  line-height: 1.45;
+  margin-top: 6rpx;
+}
+
+.optional-state {
+  color: #176b87;
+  font-size: 24rpx;
+}
+
+.optional-fields,
+.full-fields {
+  border-top: 2rpx solid #edf0f3;
+  padding: 24rpx;
+}
+
+.full-fields {
+  border-top: 0;
+}
+
+.field {
+  margin-bottom: 24rpx;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  font-size: 26rpx;
+  margin-bottom: 10rpx;
+}
+
+.input,
+.picker,
+.textarea {
+  background: #f7f8fa;
+  border: 2rpx solid #d9dfe7;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+  min-height: 76rpx;
+  padding: 16rpx 18rpx;
+  width: 100%;
+}
+
+.textarea {
+  min-height: 148rpx;
+}
+
+.checkbox-grid {
+  display: grid;
+  gap: 16rpx;
+  grid-template-columns: 1fr 1fr;
+}
+
+.checkbox-grid label {
+  align-items: center;
+  display: flex;
+  font-size: 25rpx;
+}
+
+.submit-button {
+  background: #176b87;
+  border-radius: 14rpx;
+  color: #ffffff;
+  font-size: 31rpx;
+  line-height: 84rpx;
+  margin: 28rpx 0 0;
+}
+
+.submit-button[disabled] {
+  background: #91caff;
+  color: #ffffff;
+}
+
+.submit-note {
+  display: block;
+  padding: 16rpx 0 8rpx;
+  text-align: center;
+}

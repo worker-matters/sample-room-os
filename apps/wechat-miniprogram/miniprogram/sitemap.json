@@ -1,0 +1,9 @@
+{
+  "desc": "Sample Room OS is an internal business mini program and must not be indexed publicly.",
+  "rules": [
+    {
+      "action": "disallow",
+      "page": "*"
+    }
+  ]
+}

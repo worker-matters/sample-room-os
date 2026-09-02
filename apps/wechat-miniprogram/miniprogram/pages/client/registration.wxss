@@ -1,0 +1,11 @@
+@import "../../app.wxss";
+@import "./client-shared.wxss";
+.registration-head, .request-row { align-items: center; display: flex; justify-content: space-between; }
+.registration-head view, .request-row view { display: flex; flex-direction: column; gap: 6rpx; }
+.registration-link { background: #f7f8fa; border-radius: 10rpx; display: flex; flex-direction: column; gap: 16rpx; margin-top: 22rpx; overflow-wrap: anywhere; padding: 20rpx; }
+.request-row { border-top: 2rpx solid #edf0f2; padding: 20rpx 0; }
+.request-meta { font-size: 22rpx; }
+.request-status { border-radius: 999rpx; font-size: 22rpx; padding: 6rpx 13rpx; }
+.request-status-pending { background: #fff6d7; color: #9b6b00; }
+.request-status-approved { background: #eaf8ef; color: #16863d; }
+.request-status-rejected { background: #fff0ee; color: #c33f31; }

@@ -1,0 +1,74 @@
+<test-mode-return />
+
+<view class="receiver-page intake-page">
+  <view class="mode-head">
+    <text class="mode-title">现场录入</text>
+    <view class="mode-switch">
+      <button class="mode-button {{mode === 'quick' ? 'mode-button-active' : ''}}" data-mode="quick" bindtap="changeMode">拍照简录</button>
+      <button class="mode-button {{mode === 'full' ? 'mode-button-active' : ''}}" data-mode="full" bindtap="changeMode">常规录入</button>
+    </view>
+  </view>
+
+  <view class="compact-notice" wx:if="{{mode === 'quick'}}">默认拍照简录：客户、业务员和打样单为必填</view>
+  <view class="compact-notice" wx:else>常规录入会直接创建正式订单；字段和顺序沿用现有 H5。</view>
+  <view class="message error-message" wx:if="{{message}}">{{message}}</view>
+  <view class="message success-message" wx:if="{{successMessage}}">{{successMessage}}</view>
+
+  <view class="form-surface">
+    <picker range="{{customerLabels}}" bindchange="onCustomerChange">
+      <view class="selector-row"><text>客户</text><text class="selector-value">{{selectedCustomerLabel}}</text></view>
+    </picker>
+    <picker range="{{clientUserLabels}}" bindchange="onClientUserChange">
+      <view class="selector-row"><text>业务员</text><text class="selector-value">{{selectedClientUserLabel}}</text></view>
+    </picker>
+
+    <view class="upload-section">
+      <text class="upload-title">打样单照片 / 附件</text>
+      <view class="upload-actions">
+        <button class="outline-button" bindtap="chooseCamera">拍照</button>
+        <button class="outline-button" bindtap="chooseLibrary">从相册或微信文件选择</button>
+      </view>
+      <view class="file-row" wx:for="{{files}}" wx:key="path">
+        <image wx:if="{{item.source === 'image'}}" class="file-thumb" src="{{item.path}}" mode="aspectFill" />
+        <view class="file-copy">
+          <text class="file-name">{{item.name}}</text>
+          <text class="file-size">{{item.size}} bytes</text>
+        </view>
+        <button class="file-delete" size="mini" data-index="{{index}}" bindtap="removeFile">删除</button>
+      </view>
+      <text class="empty-files" wx:if="{{!files.length}}">尚未选择附件</text>
+    </view>
+  </view>
+
+  <view wx:if="{{mode === 'quick'}}" class="optional-panel">
+    <button class="optional-toggle" bindtap="toggleOptional">
+      <view><text>完整订单信息（选填）</text><text class="optional-summary">款号、款名、数量、类型、轮次、交期、备注</text></view>
+      <text class="optional-state">{{optionalOpen ? '收起' : '展开'}}</text>
+    </button>
+    <view wx:if="{{optionalOpen}}" class="optional-fields">
+      <view class="field"><text class="field-label">款号</text><input class="input" data-field="styleNo" value="{{form.styleNo}}" bindinput="onTextInput" placeholder="可稍后在 Web 校对" /></view>
+      <view class="field"><text class="field-label">款名</text><input class="input" data-field="styleName" value="{{form.styleName}}" bindinput="onTextInput" placeholder="可稍后在 Web 校对" /></view>
+      <view class="field"><text class="field-label">数量</text><input class="input" data-field="quantity" value="{{form.quantity}}" bindinput="onTextInput" type="number" /></view>
+      <view class="field"><text class="field-label">样品类型</text><picker range="{{sampleTypeLabels}}" bindchange="onSampleTypeChange"><view class="picker">{{selectedSampleTypeLabel}}</view></picker></view>
+      <view class="field"><text class="field-label">样品轮次</text><picker range="{{sampleRoundLabels}}" bindchange="onSampleRoundChange"><view class="picker">{{selectedSampleRoundLabel}}</view></picker></view>
+      <view class="field"><text class="field-label">期望交期</text><picker mode="date" value="{{form.deliveryDate}}" bindchange="onDeliveryDateChange"><view class="picker">{{form.deliveryDate}}</view></picker></view>
+      <view class="field"><text class="field-label">备注</text><textarea class="textarea" data-field="remark" value="{{form.remark}}" bindinput="onTextInput" /></view>
+    </view>
+  </view>
+
+  <view wx:if="{{mode === 'full'}}" class="full-fields">
+    <view class="field"><text class="field-label">款号</text><input class="input" data-field="styleNo" value="{{form.styleNo}}" bindinput="onTextInput" /></view>
+    <view class="field"><text class="field-label">款名</text><input class="input" data-field="styleName" value="{{form.styleName}}" bindinput="onTextInput" /></view>
+    <view class="field"><text class="field-label">数量</text><input class="input" data-field="quantity" value="{{form.quantity}}" bindinput="onTextInput" type="number" /></view>
+    <view class="field"><text class="field-label">样品类型</text><picker range="{{sampleTypeLabels}}" bindchange="onSampleTypeChange"><view class="picker">{{selectedSampleTypeLabel}}</view></picker></view>
+    <view class="field"><text class="field-label">样品轮次</text><picker range="{{sampleRoundLabels}}" bindchange="onSampleRoundChange"><view class="picker">{{selectedSampleRoundLabel}}</view></picker></view>
+    <view class="field"><text class="field-label">期望交期</text><picker mode="date" value="{{form.deliveryDate}}" bindchange="onDeliveryDateChange"><view class="picker">{{form.deliveryDate}}</view></picker></view>
+    <view class="field"><text class="field-label">面里料状态</text><picker range="{{materialStatusLabels}}" bindchange="onFabricChange"><view class="picker">{{selectedFabricLabel}}</view></picker></view>
+    <view class="field"><text class="field-label">辅料状态</text><picker range="{{materialStatusLabels}}" bindchange="onTrimChange"><view class="picker">{{selectedTrimLabel}}</view></picker></view>
+    <view class="field"><text class="field-label">打样要求</text><checkbox-group bindchange="onSampleRequestChange" class="checkbox-grid"><label wx:for="{{sampleRequestChoices}}" wx:key="value"><checkbox value="{{item.value}}" checked="{{item.checked}}" />{{item.label}}</label></checkbox-group></view>
+    <view class="field"><text class="field-label">备注</text><textarea class="textarea" data-field="remark" value="{{form.remark}}" bindinput="onTextInput" /></view>
+  </view>
+
+  <button class="submit-button" loading="{{submitting}}" disabled="{{submitting || loading}}" bindtap="submitCurrentMode">{{mode === 'quick' ? '拍照简录' : '创建完整订单'}}</button>
+  <text class="submit-note" wx:if="{{mode === 'quick'}}">保存为待校对订单，不推进生产工序</text>
+</view>
